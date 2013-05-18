@@ -4,6 +4,7 @@ import android.bluetooth.BluetoothAdapter;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.os.IBinder;
 import android.view.KeyEvent;
 
 import com.ford.syncV4.android.logging.Log;
@@ -15,9 +16,9 @@ public class SyncReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        this.intent = intent;
-        this.serviceInstance = ProxyService.getInstance();
         Log.d("SyncReceiver Received Intent with action: " + intent.getAction());
+        this.intent = intent;
+        this.serviceInstance = peekService(context);
 
         if (phoneJustTurnedOn() && phoneHasBluetoothOn()) {
             startService(context);
@@ -37,11 +38,18 @@ public class SyncReceiver extends BroadcastReceiver {
                 abortBroadcast();
             }
         } else if (audioBecomingTooNoisy()) {
-            // signal your service to stop playback
             if (serviceRunning()) {
                 serviceInstance.pauseAnnoyingRepetitiveAudio();
             }
         }
+    }
+
+    private ProxyService peekService(Context context) {
+        IBinder iBinder = peekService(context, new Intent(context, ProxyService.class));
+        if (iBinder == null) {
+            return null;
+        }
+        return ((ProxyService.ProxyBinder) iBinder).getService();
     }
 
     private boolean phoneJustTurnedOn() {

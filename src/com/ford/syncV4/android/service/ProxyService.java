@@ -28,7 +28,7 @@ import static com.ford.syncV4.exception.SyncExceptionCause.BLUETOOTH_DISABLED;
 import static com.ford.syncV4.exception.SyncExceptionCause.SYNC_PROXY_CYCLED;
 
 public class ProxyService extends Service implements IProxyListenerALM, MyAppLinkProxy {
-    public static final int COMMAND_ID_CUSTOM = 100;
+    private static final int COMMAND_ID_CUSTOM = 100;
     private static ProxyService _instance;
     private static SyncProxyALM _syncProxy;
 
@@ -38,17 +38,17 @@ public class ProxyService extends Service implements IProxyListenerALM, MyAppLin
     private int autoIncrementedCorrId = 1;
 
     @Override
+    public IBinder onBind(Intent intent) {
+        Log.d("Service on Bind");
+        return new ProxyBinder();
+    }
+
+    @Override
     public void onCreate() {
         super.onCreate();
         Log.d("ProxyService.onCreate");
         _instance = this;
         startProxyIfNetworkConnected();
-    }
-
-    @Override
-    public IBinder onBind(Intent intent) {
-        Log.d("Service on Bind");
-        return new ProxyBinder();
     }
 
     private void startProxyIfNetworkConnected() {
@@ -68,30 +68,24 @@ public class ProxyService extends Service implements IProxyListenerALM, MyAppLin
     }
 
     private void startSyncProxy() {
-        Log.d("ProxyService.startSyncProxy()");
+        try {
+            ConnectionPreferences connectionPreferences = new ConnectionPreferences(this);
+            int transportType = connectionPreferences.getTransportType();
+            boolean isMediaApp = connectionPreferences.isAnMediaApp();
 
-        if (_syncProxy == null) {
-            try {
+            String appName = getString(R.string.app_name);
 
-                ConnectionPreferences connectionPreferences = new ConnectionPreferences(this);
-                int transportType = connectionPreferences.getTransportType();
-                boolean isMediaApp = connectionPreferences.isAnMediaApp();
-
-                String appName = getString(R.string.app_name);
-
-                if (transportType == Const.Transport.KEY_BLUETOOTH) {
-                    _syncProxy = new SyncProxyALM(this, appName, isMediaApp);
-                } else {
-                    int tcpPort = connectionPreferences.getTcpPort();
-                    String ipAddress = connectionPreferences.getIpAddress();
-                    boolean autoReconnect = connectionPreferences.shouldAutoReconnect();
-                    _syncProxy = new SyncProxyALM(this, appName, isMediaApp, new TCPTransportConfig(tcpPort, ipAddress, autoReconnect));
-                }
-            } catch (SyncException e) {
-                Log.e("Sync Wut", e);
+            if (transportType == Const.Transport.KEY_BLUETOOTH) {
+                _syncProxy = new SyncProxyALM(this, appName, isMediaApp);
+            } else {
+                int tcpPort = connectionPreferences.getTcpPort();
+                String ipAddress = connectionPreferences.getIpAddress();
+                boolean autoReconnect = connectionPreferences.shouldAutoReconnect();
+                _syncProxy = new SyncProxyALM(this, appName, isMediaApp, new TCPTransportConfig(tcpPort, ipAddress, autoReconnect));
             }
+        } catch (SyncException e) {
+            Log.e("Sync Wut", e);
         }
-        Log.d("ProxyService.startSyncProxy() returning");
     }
 
     @Override
@@ -126,15 +120,6 @@ public class ProxyService extends Service implements IProxyListenerALM, MyAppLin
     @Override
     public SyncProxyALM getSyncProxyInstance() {
         return _syncProxy;
-    }
-
-    /**
-     * Find out how the Broadcast reciever can get the service
-     * or the reason why it needs the service
-     * then delete this method
-     */
-    public static ProxyService getInstance() {
-        return _instance;
     }
 
     private int nextCorrelationID() {

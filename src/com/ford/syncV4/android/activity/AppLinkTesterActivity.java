@@ -174,6 +174,7 @@ public class AppLinkTesterActivity extends FragmentActivity implements OnClickLi
                     } catch (SyncException e) {
                         _msgAdapter.logMessage("Error sending message: " + e, E, e);
                     }
+                    sendMessageDialog = null; // hack till we do fragments
                 }
             });
         } else if (id == R.id.btnPlayPause) {
