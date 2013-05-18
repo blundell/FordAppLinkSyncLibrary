@@ -29,7 +29,6 @@ import static com.ford.syncV4.exception.SyncExceptionCause.SYNC_PROXY_CYCLED;
 
 public class ProxyService extends Service implements IProxyListenerALM, MyAppLinkProxy {
     private static final int COMMAND_ID_CUSTOM = 100;
-    private static ProxyService _instance;
     private static SyncProxyALM _syncProxy;
 
     private MediaPlayer embeddedAudioPlayer;
@@ -47,7 +46,6 @@ public class ProxyService extends Service implements IProxyListenerALM, MyAppLin
     public void onCreate() {
         super.onCreate();
         Log.d("ProxyService.onCreate");
-        _instance = this;
         startProxyIfNetworkConnected();
     }
 
