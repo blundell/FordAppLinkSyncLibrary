@@ -31,7 +31,7 @@ import static com.ford.syncV4.android.service.ButtonNameParcel.EXTRA_BUTTON_NAME
 
 public class AppLinkTesterActivity extends FragmentActivity implements OnClickListener {
 
-    private ProxyServiceConnection proxyServiceConnection;
+    private AppLinkServiceConnection appLinkServiceConnection;
     private SendMessageDialog sendMessageDialog;
     private LogAdapter _msgAdapter;
 
@@ -97,9 +97,9 @@ public class AppLinkTesterActivity extends FragmentActivity implements OnClickLi
         bindToProxyService(null);
     }
 
-    private void bindToProxyService(ProxyServiceConnection.ProxyServiceListener listener) {
-        proxyServiceConnection = new ProxyServiceConnection(listener);
-        bindService(new Intent(this, ProxyAppLinkService.class), proxyServiceConnection, Context.BIND_AUTO_CREATE);
+    private void bindToProxyService(AppLinkServiceConnection.ServiceListener listener) {
+        appLinkServiceConnection = new AppLinkServiceConnection(listener);
+        bindService(new Intent(this, ProxyAppLinkService.class), appLinkServiceConnection, Context.BIND_AUTO_CREATE);
     }
 
     private static final int PROXY_START = 5;
@@ -128,11 +128,11 @@ public class AppLinkTesterActivity extends FragmentActivity implements OnClickLi
                     mBtAdapter.enable();
                 }
 
-                bindToProxyService(new ProxyServiceConnection.ProxyServiceListener() {
+                bindToProxyService(new AppLinkServiceConnection.ServiceListener() {
                     @Override
                     public void onProxyServiceStarted() {
                         Log.d("Service started and onOptionsItem knows it");
-                        proxyServiceConnection.resetConnection();
+                        appLinkServiceConnection.resetConnection();
                     }
                 });
 
@@ -165,12 +165,12 @@ public class AppLinkTesterActivity extends FragmentActivity implements OnClickLi
                 @Override
                 public void onSendMessage(RPCMessage message, int correlationIdUsed) {
                     _msgAdapter.logMessage(message, true);
-                    proxyServiceConnection.sendRPCRequest(message);
+                    appLinkServiceConnection.sendRPCRequest(message);
                     sendMessageDialog = null; // hack till we do fragments
                 }
             });
         } else if (id == R.id.btnPlayPause) {
-            proxyServiceConnection.playPauseAudio();
+            appLinkServiceConnection.playPauseAudio();
         }
     }
 
@@ -246,8 +246,8 @@ public class AppLinkTesterActivity extends FragmentActivity implements OnClickLi
 
     //upon onDestroy(), dispose current proxy and create a new one to enable auto-start
     private void endSyncProxyInstance() {
-        proxyServiceConnection.resetConnection();
-        unbindService(proxyServiceConnection);
+        appLinkServiceConnection.resetConnection();
+        unbindService(appLinkServiceConnection);
     }
 }
 

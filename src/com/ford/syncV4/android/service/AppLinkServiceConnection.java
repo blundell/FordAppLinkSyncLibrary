@@ -7,25 +7,25 @@ import android.os.IBinder;
 import com.ford.syncV4.android.logging.Log;
 import com.ford.syncV4.proxy.RPCMessage;
 
-public class ProxyServiceConnection implements ServiceConnection, AppLinkService {
+public class AppLinkServiceConnection implements ServiceConnection, AppLinkService {
 
-    private final ProxyServiceListener proxyServiceListener;
+    private final ServiceListener serviceListener;
     private AppLinkService proxyService;
 
-    public interface ProxyServiceListener {
+    public interface ServiceListener {
         void onProxyServiceStarted();
     }
 
-    public ProxyServiceConnection(ProxyServiceListener proxyServiceListener) {
-        this.proxyServiceListener = proxyServiceListener;
+    public AppLinkServiceConnection(ServiceListener serviceListener) {
+        this.serviceListener = serviceListener;
     }
 
     @Override
     public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
         Log.d("Service connected");
         proxyService = ((ProxyAppLinkService.ProxyBinder) iBinder).getService();
-        if (proxyServiceListener != null) {
-            proxyServiceListener.onProxyServiceStarted();
+        if (serviceListener != null) {
+            serviceListener.onProxyServiceStarted();
         }
     }
 
