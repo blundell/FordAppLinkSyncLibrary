@@ -5,12 +5,12 @@ import android.content.ServiceConnection;
 import android.os.IBinder;
 
 import com.ford.syncV4.android.logging.Log;
-import com.ford.syncV4.proxy.SyncProxyALM;
+import com.ford.syncV4.proxy.RPCMessage;
 
-public class ProxyServiceConnection implements ServiceConnection, MyAppLinkProxy {
+public class ProxyServiceConnection implements ServiceConnection, AppLinkService {
 
     private final ProxyServiceListener proxyServiceListener;
-    private ProxyService proxyService;
+    private AppLinkService proxyService;
 
     public interface ProxyServiceListener {
         void onProxyServiceStarted();
@@ -23,7 +23,7 @@ public class ProxyServiceConnection implements ServiceConnection, MyAppLinkProxy
     @Override
     public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
         Log.d("Service connected");
-        proxyService = ((ProxyService.ProxyBinder) iBinder).getService();
+        proxyService = ((ProxyAppLinkService.ProxyBinder) iBinder).getService();
         if (proxyServiceListener != null) {
             proxyServiceListener.onProxyServiceStarted();
         }
@@ -35,17 +35,17 @@ public class ProxyServiceConnection implements ServiceConnection, MyAppLinkProxy
     }
 
     @Override
-    public SyncProxyALM getSyncProxyInstance() {
-        return proxyService.getSyncProxyInstance();
+    public void resetConnection() {
+        proxyService.resetConnection();
     }
 
     @Override
-    public void playPauseAnnoyingRepetitiveAudio() {
-        proxyService.playPauseAnnoyingRepetitiveAudio();
+    public void sendRPCRequest(RPCMessage message) {
+        proxyService.sendRPCRequest(message);
     }
 
     @Override
-    public void reset() {
-        proxyService.reset();
+    public void playPauseAudio() {
+        proxyService.playPauseAudio();
     }
 }

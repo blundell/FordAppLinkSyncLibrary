@@ -14,6 +14,7 @@ import com.ford.syncV4.android.persistance.ConnectionPreferences;
 import com.ford.syncV4.android.persistance.Const;
 import com.ford.syncV4.exception.SyncException;
 import com.ford.syncV4.exception.SyncExceptionCause;
+import com.ford.syncV4.proxy.RPCMessage;
 import com.ford.syncV4.proxy.SyncProxyALM;
 import com.ford.syncV4.proxy.interfaces.IProxyListenerALM;
 import com.ford.syncV4.proxy.rpc.*;
@@ -27,7 +28,7 @@ import java.util.Vector;
 import static com.ford.syncV4.exception.SyncExceptionCause.BLUETOOTH_DISABLED;
 import static com.ford.syncV4.exception.SyncExceptionCause.SYNC_PROXY_CYCLED;
 
-public class ProxyService extends Service implements IProxyListenerALM, MyAppLinkProxy {
+public class ProxyAppLinkService extends Service implements IProxyListenerALM, AppLinkService {
     private static final int COMMAND_ID_CUSTOM = 100;
     private static SyncProxyALM _syncProxy;
 
@@ -45,7 +46,7 @@ public class ProxyService extends Service implements IProxyListenerALM, MyAppLin
     @Override
     public void onCreate() {
         super.onCreate();
-        Log.d("ProxyService.onCreate");
+        Log.d("ProxyAppLinkService.onCreate");
         startProxyIfNetworkConnected();
     }
 
@@ -87,7 +88,37 @@ public class ProxyService extends Service implements IProxyListenerALM, MyAppLin
     }
 
     @Override
-    public void playPauseAnnoyingRepetitiveAudio() {
+    public void resetConnection() {
+        if (_syncProxy != null) {
+            if (_syncProxy.getCurrentTransportType() == TransportType.BLUETOOTH) {
+                try {
+                    _syncProxy.resetProxy();
+                } catch (SyncException ignore) {
+                    Log.e("Reset failed", ignore);
+                }
+            } else {
+                Log.e("endSyncProxyInstance. No reset required if transport is TCP");
+            }
+        } else {
+            startProxyIfNetworkConnected();
+        }
+    }
+
+    @Override
+    public void sendRPCRequest(RPCMessage message) {
+        if (_syncProxy != null) {
+            try {
+                _syncProxy.sendRPCRequest(message);
+            } catch (SyncException e) {
+                Log.e("Error sending message", e);
+            }
+        } else {
+            Log.e("Sync Proxy null, can't send a message");
+        }
+    }
+
+    @Override
+    public void playPauseAudio() {
         if (embeddedAudioPlayer != null && embeddedAudioPlayer.isPlaying()) {
             pauseAnnoyingRepetitiveAudio();
             playingAudio = false;
@@ -113,11 +144,6 @@ public class ProxyService extends Service implements IProxyListenerALM, MyAppLin
 
             Log.d("Pausing audio"); // TODO add callback
         }
-    }
-
-    @Override
-    public SyncProxyALM getSyncProxyInstance() {
-        return _syncProxy;
     }
 
     private int nextCorrelationID() {
@@ -235,24 +261,7 @@ public class ProxyService extends Service implements IProxyListenerALM, MyAppLin
 
         SyncExceptionCause syncExceptionCause = ((SyncException) e).getSyncExceptionCause();
         if (syncExceptionCause != SYNC_PROXY_CYCLED && syncExceptionCause != BLUETOOTH_DISABLED) {
-            reset();
-        }
-    }
-
-    @Override
-    public void reset() {
-        if (_syncProxy != null) {
-            if (_syncProxy.getCurrentTransportType() == TransportType.BLUETOOTH) {
-                try {
-                    _syncProxy.resetProxy();
-                } catch (SyncException ignore) {
-                    Log.e("Reset failed", ignore);
-                }
-            } else {
-                Log.e("endSyncProxyInstance. No reset required if transport is TCP");
-            }
-        } else {
-            startProxyIfNetworkConnected();
+            resetConnection();
         }
     }
 
@@ -362,7 +371,7 @@ public class ProxyService extends Service implements IProxyListenerALM, MyAppLin
 
         switch (notification.getButtonName()) {
             case OK:
-                playPauseAnnoyingRepetitiveAudio();
+                playPauseAudio();
                 break;
             case SEEKLEFT:
                 Log.d("Seek left pressed");
@@ -442,7 +451,7 @@ public class ProxyService extends Service implements IProxyListenerALM, MyAppLin
 
     @Override
     public void onDestroy() {
-        Log.d("ProxyService.onDestroy");
+        Log.d("ProxyAppLinkService.onDestroy");
         disposeSyncProxy();
         if (embeddedAudioPlayer != null) {
             embeddedAudioPlayer.release();
@@ -451,7 +460,7 @@ public class ProxyService extends Service implements IProxyListenerALM, MyAppLin
     }
 
     private void disposeSyncProxy() {
-        Log.d("ProxyService.disposeSyncProxy()");
+        Log.d("ProxyAppLinkService.disposeSyncProxy()");
 
         if (_syncProxy != null) {
             try {
@@ -465,8 +474,8 @@ public class ProxyService extends Service implements IProxyListenerALM, MyAppLin
 
     public class ProxyBinder extends Binder {
 
-        public ProxyService getService() {
-            return ProxyService.this;
+        public AppLinkService getService() {
+            return ProxyAppLinkService.this;
         }
 
     }

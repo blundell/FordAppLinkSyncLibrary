@@ -21,14 +21,12 @@ import com.ford.syncV4.android.logging.Log;
 import com.ford.syncV4.android.persistance.ConnectionPreferences;
 import com.ford.syncV4.android.persistance.Const;
 import com.ford.syncV4.android.service.*;
-import com.ford.syncV4.exception.SyncException;
 import com.ford.syncV4.proxy.RPCMessage;
 import com.ford.syncV4.proxy.rpc.enums.ButtonName;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.ford.syncV4.android.adapters.LogAdapter.Type.E;
 import static com.ford.syncV4.android.service.ButtonNameParcel.EXTRA_BUTTON_NAME_PARCEL;
 
 public class AppLinkTesterActivity extends FragmentActivity implements OnClickListener {
@@ -101,7 +99,7 @@ public class AppLinkTesterActivity extends FragmentActivity implements OnClickLi
 
     private void bindToProxyService(ProxyServiceConnection.ProxyServiceListener listener) {
         proxyServiceConnection = new ProxyServiceConnection(listener);
-        bindService(new Intent(this, ProxyService.class), proxyServiceConnection, Context.BIND_AUTO_CREATE);
+        bindService(new Intent(this, ProxyAppLinkService.class), proxyServiceConnection, Context.BIND_AUTO_CREATE);
     }
 
     private static final int PROXY_START = 5;
@@ -134,13 +132,7 @@ public class AppLinkTesterActivity extends FragmentActivity implements OnClickLi
                     @Override
                     public void onProxyServiceStarted() {
                         Log.d("Service started and onOptionsItem knows it");
-                        if (proxyServiceConnection.getSyncProxyInstance() != null) {
-                            try {
-                                proxyServiceConnection.getSyncProxyInstance().resetProxy();
-                            } catch (SyncException ignore) {
-                                Log.e("Reset proxy failed and ignored", ignore);
-                            }
-                        }
+                        proxyServiceConnection.resetConnection();
                     }
                 });
 
@@ -158,7 +150,11 @@ public class AppLinkTesterActivity extends FragmentActivity implements OnClickLi
                 startSyncProxy();
                 return true;
         }
-        return super.onOptionsItemSelected(item);
+
+        return super.
+
+                onOptionsItemSelected(item);
+
     }
 
     @Override
@@ -168,17 +164,13 @@ public class AppLinkTesterActivity extends FragmentActivity implements OnClickLi
             getSendMessageDialog().setListener(new SendMessageDialog.SendMessageDialogListener() {
                 @Override
                 public void onSendMessage(RPCMessage message, int correlationIdUsed) {
-                    try {
-                        _msgAdapter.logMessage(message, true);
-                        proxyServiceConnection.getSyncProxyInstance().sendRPCRequest(message);
-                    } catch (SyncException e) {
-                        _msgAdapter.logMessage("Error sending message: " + e, E, e);
-                    }
+                    _msgAdapter.logMessage(message, true);
+                    proxyServiceConnection.sendRPCRequest(message);
                     sendMessageDialog = null; // hack till we do fragments
                 }
             });
         } else if (id == R.id.btnPlayPause) {
-            proxyServiceConnection.playPauseAnnoyingRepetitiveAudio();
+            proxyServiceConnection.playPauseAudio();
         }
     }
 
@@ -224,7 +216,7 @@ public class AppLinkTesterActivity extends FragmentActivity implements OnClickLi
     }
 
     /**
-     * Called when the app is activated from HMI for the first time. ProxyService
+     * Called when the app is activated from HMI for the first time. ProxyAppLinkService
      * automatically subscribes to buttons, so we reflect that in the
      * subscription list.
      */
@@ -254,7 +246,7 @@ public class AppLinkTesterActivity extends FragmentActivity implements OnClickLi
 
     //upon onDestroy(), dispose current proxy and create a new one to enable auto-start
     private void endSyncProxyInstance() {
-        proxyServiceConnection.reset();
+        proxyServiceConnection.resetConnection();
         unbindService(proxyServiceConnection);
     }
 }

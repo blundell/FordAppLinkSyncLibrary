@@ -31,7 +31,7 @@
       </intent-filter>
     </activity>
 
-    <service android:name=".service.ProxyService" />
+    <service android:name=".service.ProxyAppLinkService" />
 
     <receiver android:name=".receivers.SyncReceiver">
       <intent-filter>

@@ -8,11 +8,11 @@ import android.os.IBinder;
 import android.view.KeyEvent;
 
 import com.ford.syncV4.android.logging.Log;
-import com.ford.syncV4.android.service.ProxyService;
+import com.ford.syncV4.android.service.ProxyAppLinkService;
 
 public class SyncReceiver extends BroadcastReceiver {
     private Intent intent;
-    private ProxyService serviceInstance;
+    private ProxyAppLinkService serviceInstance;
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -44,12 +44,12 @@ public class SyncReceiver extends BroadcastReceiver {
         }
     }
 
-    private ProxyService peekService(Context context) {
-        IBinder iBinder = peekService(context, new Intent(context, ProxyService.class));
+    private ProxyAppLinkService peekService(Context context) {
+        IBinder iBinder = peekService(context, new Intent(context, ProxyAppLinkService.class));
         if (iBinder == null) {
             return null;
         }
-        return ((ProxyService.ProxyBinder) iBinder).getService();
+        return ((ProxyAppLinkService.ProxyBinder) iBinder).getService();
     }
 
     private boolean phoneJustTurnedOn() {
@@ -63,7 +63,7 @@ public class SyncReceiver extends BroadcastReceiver {
 
     private void startService(Context context) {
         Log.d("Bt on start service");
-        Intent startIntent = new Intent(context, ProxyService.class);
+        Intent startIntent = new Intent(context, ProxyAppLinkService.class);
         startIntent.putExtras(intent);
         context.startService(startIntent);
     }
@@ -78,7 +78,7 @@ public class SyncReceiver extends BroadcastReceiver {
 
     private void stopService(Context context) {
         Log.d("Bt off stop service");
-        Intent stopIntent = new Intent(context, ProxyService.class);
+        Intent stopIntent = new Intent(context, ProxyAppLinkService.class);
         stopIntent.putExtras(intent);
         context.stopService(stopIntent);
     }
