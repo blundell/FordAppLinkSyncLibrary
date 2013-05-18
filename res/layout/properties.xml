@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/scrollView1"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content" >
+    
+	<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	    android:id="@+id/properties_Root"
+	    android:layout_width="match_parent"
+	    android:layout_height="match_parent"
+	    android:orientation="vertical" >
+	
+	    <LinearLayout
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content" >
+	
+	        <TextView
+	            android:id="@+id/TextView01"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:layout_marginLeft="5dp"
+	            android:layout_marginRight="5dp"
+	            android:text="App name:"
+	            android:textAppearance="?android:attr/textAppearanceMedium" />
+	
+	        <EditText
+	            android:id="@+id/properties_appName"
+	            android:layout_width="0dip"
+	            android:layout_height="wrap_content"
+	            android:layout_marginRight="5dp"
+	            android:layout_weight="1"
+	            android:ems="10"
+	            android:inputType="textCapSentences"
+	            android:maxLength="25"
+	            android:text="AppLinkTester" >
+	        </EditText>
+	
+	    </LinearLayout>
+    
+        <CheckBox
+            android:id="@+id/properties_checkMedia"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:text="Media" />
+	
+	    <RadioGroup
+	        android:id="@+id/properties_radioGroupTransport"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:orientation="horizontal" >
+	
+	        <RadioButton
+	            android:id="@+id/properties_radioWiFi"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:text="WiFi" />
+	
+	        <RadioButton
+	            android:id="@+id/properties_radioBT"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:checked="true"
+	            android:text="Bluetooth" />
+	    </RadioGroup>
+	
+	    <LinearLayout
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content" >
+	
+	        <TextView
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:layout_marginLeft="5dp"
+	            android:layout_marginRight="5dp"
+	            android:text="IP address:"
+	            android:textAppearance="?android:attr/textAppearanceMedium" />
+	
+	        <EditText
+	            android:id="@+id/properties_ipAddr"
+	            android:layout_width="0dp"
+	            android:layout_height="wrap_content"
+	            android:layout_marginRight="5dp"
+	            android:layout_weight="1"
+	            android:ems="10"
+	            android:inputType="text"
+	            android:maxLength="15"
+	            android:text="10.0.2.2" />
+	
+	    </LinearLayout>
+	
+	    <LinearLayout
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content" >
+	
+	        <TextView
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:layout_marginLeft="5dp"
+	            android:layout_marginRight="5dp"
+	            android:text="Port:"
+	            android:textAppearance="?android:attr/textAppearanceMedium" />
+	
+	        <EditText
+	            android:id="@+id/properties_tcpPort"
+	            android:layout_width="0dp"
+	            android:layout_height="wrap_content"
+	            android:layout_marginRight="5dp"
+	            android:layout_weight="1"
+	            android:ems="10"
+	            android:inputType="number"
+	            android:maxLength="5"
+	            android:text="50007" />
+	
+	    </LinearLayout>
+	
+	    <CheckBox
+	        android:id="@+id/properties_checkAutoReconnect"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:checked="true"
+	        android:text="Auto reconnect" />
+	
+	</LinearLayout>
+</ScrollView>
