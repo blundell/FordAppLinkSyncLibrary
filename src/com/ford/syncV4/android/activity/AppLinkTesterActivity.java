@@ -18,7 +18,6 @@ import com.ford.syncV4.android.activity.dialog.PropertiesDialog;
 import com.ford.syncV4.android.activity.dialog.SendMessageDialog;
 import com.ford.syncV4.android.adapters.LogAdapter;
 import com.ford.syncV4.android.logging.Log;
-import com.ford.syncV4.android.module.ModuleTest;
 import com.ford.syncV4.android.persistance.ConnectionPreferences;
 import com.ford.syncV4.android.persistance.Const;
 import com.ford.syncV4.android.service.*;
@@ -106,7 +105,6 @@ public class AppLinkTesterActivity extends FragmentActivity implements OnClickLi
     }
 
     private static final int PROXY_START = 5;
-    private static final int XML_TEST = 7;
     private static final int MNU_CLEAR = 10;
     private static final int MNU_UNREGISTER = 14;
 
@@ -116,7 +114,6 @@ public class AppLinkTesterActivity extends FragmentActivity implements OnClickLi
         if (result) {
             menu.add(0, PROXY_START, 0, "Proxy Start");
             menu.add(0, MNU_CLEAR, 0, "Clear Messages");
-            menu.add(0, XML_TEST, 0, "XML Test");
             menu.add(0, MNU_UNREGISTER, 0, "Unregister");
             return true;
         } else {
@@ -156,21 +153,12 @@ public class AppLinkTesterActivity extends FragmentActivity implements OnClickLi
             case MNU_CLEAR:
                 _msgAdapter.clear();
                 return true;
-            case XML_TEST:
-                Toast.makeText(this, "Doing XML text. Start the app on SYNC first", Toast.LENGTH_LONG).show();
-                restartTestModule();
-                return true;
             case MNU_UNREGISTER:
                 endSyncProxyInstance();
                 startSyncProxy();
                 return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    private void restartTestModule() {
-        ModuleTest testModule = new ModuleTest(proxyServiceConnection, _msgAdapter, this);
-        testModule.runTests();
     }
 
     @Override
@@ -219,8 +207,8 @@ public class AppLinkTesterActivity extends FragmentActivity implements OnClickLi
             } else if (ProxyServiceAction.ACTION_CREATE_INTERACTION_CHOICE_RESPONSE.equals(action)) {
                 CreateChoiceSetParcel createChoiceSetParcel = (CreateChoiceSetParcel) intent.getSerializableExtra(CreateChoiceSetParcel.EXTRA_CREATE_CHOICE_SET_PARCEL);
                 onCreateChoiceSetResponse(createChoiceSetParcel.isSuccessful());
-            } else if (ProxyServiceAction.ACTION_XML_TEST_COMMAND.equals(action)) {
-                restartTestModule();
+            } else if (ProxyServiceAction.ACTION_TEST_CUSTOM_COMMAND.equals(action)) {
+                Toast.makeText(AppLinkTesterActivity.this, "Received a custom command", Toast.LENGTH_SHORT).show();
             }
         }
     };

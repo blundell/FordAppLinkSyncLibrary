@@ -28,7 +28,7 @@ import static com.ford.syncV4.exception.SyncExceptionCause.BLUETOOTH_DISABLED;
 import static com.ford.syncV4.exception.SyncExceptionCause.SYNC_PROXY_CYCLED;
 
 public class ProxyService extends Service implements IProxyListenerALM, MyAppLinkProxy {
-    public static final int COMMAND_ID_XML = 100;
+    public static final int COMMAND_ID_CUSTOM = 100;
     private static ProxyService _instance;
     private static SyncProxyALM _syncProxy;
 
@@ -218,9 +218,9 @@ public class ProxyService extends Service implements IProxyListenerALM, MyAppLin
         }
 
         try {
-            String menuText = "XML Test";
-            Vector<String> voiceCommands = new Vector<String>(Arrays.asList("XML Test", "XML"));
-            _syncProxy.addCommand(COMMAND_ID_XML, menuText, voiceCommands, nextCorrelationID());
+            String menuText = "Custom Command";
+            Vector<String> voiceCommands = new Vector<String>(Arrays.asList("Custom Command", "Run Me"));
+            _syncProxy.addCommand(COMMAND_ID_CUSTOM, menuText, voiceCommands, nextCorrelationID());
         } catch (SyncException e) {
             Log.e("Error adding AddCommands", e);
         }
@@ -231,8 +231,8 @@ public class ProxyService extends Service implements IProxyListenerALM, MyAppLin
         Log.d("An OnCommand was received. " + notification.getCmdID());
 
         switch (notification.getCmdID()) {
-            case COMMAND_ID_XML:
-                ProxyServiceAction.broadcastXmlTestCommand(this);
+            case COMMAND_ID_CUSTOM:
+                ProxyServiceAction.broadcastTestCustomCommand(this);
                 break;
             default:
                 break;

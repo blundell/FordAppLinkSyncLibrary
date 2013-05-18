@@ -8,13 +8,13 @@ public class ProxyServiceAction {
     public static final String ACTION_BUTTONS_SUBSCRIBED = "com.ford.syncV4.android.PROXY_SERIVCE";
     public static final String ACTION_PROXY_CLOSED = "ACTION_PROXY_CLOSED";
     public static final String ACTION_CREATE_INTERACTION_CHOICE_RESPONSE = "ACTION_CREATE_INTERACTION_CHOICE_RESPONSE";
-    public static final String ACTION_XML_TEST_COMMAND = "ACTION_XML_TEST_COMMAND";
+    public static final String ACTION_TEST_CUSTOM_COMMAND = "ACTION_TEST_CUSTOM_COMMAND";
     public static final IntentFilter FILTER_PROXY_SERVICE = new IntentFilter(ACTION_BUTTONS_SUBSCRIBED);
 
     static {
         FILTER_PROXY_SERVICE.addAction(ACTION_PROXY_CLOSED);
         FILTER_PROXY_SERVICE.addAction(ACTION_CREATE_INTERACTION_CHOICE_RESPONSE);
-        FILTER_PROXY_SERVICE.addAction(ACTION_XML_TEST_COMMAND);
+        FILTER_PROXY_SERVICE.addAction(ACTION_TEST_CUSTOM_COMMAND);
     }
 
     public static void broadcastButtonsSubscribed(Context context, ButtonNameParcel buttonNameParcel) {
@@ -23,8 +23,8 @@ public class ProxyServiceAction {
         context.sendBroadcast(intent);
     }
 
-    public static void broadcastXmlTestCommand(Context context) {
-        Intent intent = new Intent(ACTION_XML_TEST_COMMAND);
+    public static void broadcastTestCustomCommand(Context context) {
+        Intent intent = new Intent(ACTION_TEST_CUSTOM_COMMAND);
         context.sendBroadcast(intent);
     }
 
