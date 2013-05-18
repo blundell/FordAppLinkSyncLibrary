@@ -8,11 +8,12 @@ import android.os.IBinder;
 import android.view.KeyEvent;
 
 import com.ford.syncV4.android.logging.Log;
+import com.ford.syncV4.android.service.AppLinkService;
 import com.ford.syncV4.android.service.ProxyAppLinkService;
 
 public class SyncReceiver extends BroadcastReceiver {
     private Intent intent;
-    private ProxyAppLinkService serviceInstance;
+    private AppLinkService serviceInstance;
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -39,12 +40,12 @@ public class SyncReceiver extends BroadcastReceiver {
             }
         } else if (audioBecomingTooNoisy()) {
             if (serviceRunning()) {
-                serviceInstance.pauseAnnoyingRepetitiveAudio();
+                serviceInstance.playPauseAudio();
             }
         }
     }
 
-    private ProxyAppLinkService peekService(Context context) {
+    private AppLinkService peekService(Context context) {
         IBinder iBinder = peekService(context, new Intent(context, ProxyAppLinkService.class));
         if (iBinder == null) {
             return null;
@@ -92,7 +93,7 @@ public class SyncReceiver extends BroadcastReceiver {
     }
 
     private void resetService() {
-        serviceInstance.reset();
+        serviceInstance.resetConnection();
     }
 
     private boolean mediaButtonPressed() {

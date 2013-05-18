@@ -138,7 +138,7 @@ public class ProxyAppLinkService extends Service implements IProxyListenerALM, A
         Log.d("Playing audio"); // TODO add callback
     }
 
-    public void pauseAnnoyingRepetitiveAudio() {
+    private void pauseAnnoyingRepetitiveAudio() {
         if (embeddedAudioPlayer != null && embeddedAudioPlayer.isPlaying()) {
             embeddedAudioPlayer.pause();
 
