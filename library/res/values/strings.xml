@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="type_here">Type here:</string>
-    <string name="app_name">AppLinkTester</string>
-    <string name="connect">Connect</string>
-    <string name="speak">Speak</string>
-    
+  <string name="app_name">AppLinkTester</string>
+
 </resources>
