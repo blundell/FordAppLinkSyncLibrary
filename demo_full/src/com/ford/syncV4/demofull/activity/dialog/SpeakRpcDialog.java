@@ -1,4 +1,4 @@
-package com.ford.syncV4.android.activity.dialog;
+package com.ford.syncV4.demofull.activity.dialog;
 
 import android.app.AlertDialog;
 import android.content.Context;

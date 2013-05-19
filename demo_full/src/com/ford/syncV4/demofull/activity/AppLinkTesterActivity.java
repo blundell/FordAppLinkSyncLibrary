@@ -1,4 +1,4 @@
-package com.ford.syncV4.android.activity;
+package com.ford.syncV4.demofull.activity;
 
 import android.bluetooth.BluetoothAdapter;
 import android.content.BroadcastReceiver;
@@ -14,10 +14,10 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.ford.syncV4.android.R;
-import com.ford.syncV4.android.activity.dialog.PropertiesDialog;
-import com.ford.syncV4.android.activity.dialog.SendMessageDialog;
-import com.ford.syncV4.android.adapters.LogAdapter;
-import com.ford.syncV4.android.logging.Log;
+import com.ford.syncV4.demofull.activity.dialog.PropertiesDialog;
+import com.ford.syncV4.demofull.activity.dialog.SendMessageDialog;
+import com.ford.syncV4.demofull.adapters.LogAdapter;
+import com.ford.syncV4.demofull.logging.Log;
 import com.ford.syncV4.android.persistance.ConnectionPreferences;
 import com.ford.syncV4.android.persistance.Const;
 import com.ford.syncV4.android.service.*;

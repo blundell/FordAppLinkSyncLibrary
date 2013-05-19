@@ -8,7 +8,6 @@ import android.os.Binder;
 import android.os.IBinder;
 
 import com.ford.syncV4.android.R;
-import com.ford.syncV4.android.activity.AppLinkTesterActivity;
 import com.ford.syncV4.android.logging.Log;
 import com.ford.syncV4.android.persistance.ConnectionPreferences;
 import com.ford.syncV4.android.persistance.Const;
@@ -196,13 +195,13 @@ public class ProxyAppLinkService extends Service implements IProxyListenerALM, A
     }
 
     private void showLockScreen() {
-        Intent i = new Intent(this, AppLinkTesterActivity.class);
-        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-        startActivity(i);
+//        Intent i = new Intent(this, AppLinkTesterActivity.class);
+//        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+//        startActivity(i);   TODO
     }
 
     private void clearLockScreen() {
-
+        // TODO
     }
 
     private void initialize() {

@@ -1,8 +1,8 @@
-package com.ford.syncV4.android.adapters;
+package com.ford.syncV4.demofull.adapters;
 
 import android.app.Activity;
 
-import com.ford.syncV4.android.logging.Log;
+import com.ford.syncV4.demofull.logging.Log;
 
 import java.util.List;
 

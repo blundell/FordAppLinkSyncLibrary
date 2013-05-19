@@ -1,4 +1,4 @@
-package com.ford.syncV4.android.adapters;
+package com.ford.syncV4.demofull.adapters;
 
 import android.content.Context;
 import android.graphics.Color;

@@ -1,4 +1,4 @@
-package com.ford.syncV4.android.constants;
+package com.ford.syncV4.demofull.activity.dialog;
 
 public class SyncSubMenu {
     private String menuName;

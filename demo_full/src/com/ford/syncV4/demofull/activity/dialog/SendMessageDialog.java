@@ -1,4 +1,4 @@
-package com.ford.syncV4.android.activity.dialog;
+package com.ford.syncV4.demofull.activity.dialog;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -8,8 +8,7 @@ import android.view.View;
 import android.widget.*;
 
 import com.ford.syncV4.android.R;
-import com.ford.syncV4.android.constants.SyncSubMenu;
-import com.ford.syncV4.android.logging.Log;
+import com.ford.syncV4.demofull.logging.Log;
 import com.ford.syncV4.proxy.RPCMessage;
 import com.ford.syncV4.proxy.TTSChunkFactory;
 import com.ford.syncV4.proxy.constants.Names;

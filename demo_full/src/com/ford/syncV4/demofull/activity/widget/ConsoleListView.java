@@ -1,4 +1,4 @@
-package com.ford.syncV4.android.activity.widget;
+package com.ford.syncV4.demofull.activity.widget;
 
 import android.R;
 import android.app.AlertDialog;
@@ -9,7 +9,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
-import com.ford.syncV4.android.logging.Log;
+import com.ford.syncV4.demofull.logging.Log;
 import com.ford.syncV4.proxy.RPCMessage;
 
 import org.json.JSONException;
