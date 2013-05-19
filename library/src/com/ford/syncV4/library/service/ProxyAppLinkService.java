@@ -20,6 +20,7 @@ import com.ford.syncV4.proxy.rpc.enums.DriverDistractionState;
 import com.ford.syncV4.transport.TransportType;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Vector;
 
 import static com.ford.syncV4.exception.SyncExceptionCause.BLUETOOTH_DISABLED;
@@ -56,6 +57,8 @@ public class ProxyAppLinkService extends Service implements IProxyListenerALM, A
             BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
             if (bluetoothAdapter != null && bluetoothAdapter.isEnabled()) {
                 startSyncProxy();
+            } else {
+                Log.e("Unable to start proxy - Bluetooth is disabled");
             }
         }
     }
@@ -163,27 +166,19 @@ public class ProxyAppLinkService extends Service implements IProxyListenerALM, A
 
     private void subscribeToButtonEvents() {
         try {
-            proxy.subscribeButton(ButtonName.OK, nextCorrelationID());
-            proxy.subscribeButton(ButtonName.SEEKLEFT, nextCorrelationID());
-            proxy.subscribeButton(ButtonName.SEEKRIGHT, nextCorrelationID());
-            proxy.subscribeButton(ButtonName.TUNEUP, nextCorrelationID());
-            proxy.subscribeButton(ButtonName.TUNEDOWN, nextCorrelationID());
-            proxy.subscribeButton(ButtonName.PRESET_1, nextCorrelationID());
-            proxy.subscribeButton(ButtonName.PRESET_2, nextCorrelationID());
-            proxy.subscribeButton(ButtonName.PRESET_3, nextCorrelationID());
-            proxy.subscribeButton(ButtonName.PRESET_4, nextCorrelationID());
-            proxy.subscribeButton(ButtonName.PRESET_5, nextCorrelationID());
-            proxy.subscribeButton(ButtonName.PRESET_6, nextCorrelationID());
-            proxy.subscribeButton(ButtonName.PRESET_7, nextCorrelationID());
-            proxy.subscribeButton(ButtonName.PRESET_8, nextCorrelationID());
-            proxy.subscribeButton(ButtonName.PRESET_9, nextCorrelationID());
-            proxy.subscribeButton(ButtonName.PRESET_0, nextCorrelationID());
-
-            ButtonNameParcel buttonNameParcel = new ButtonNameParcel(Arrays.asList(
+            List<ButtonName> buttonNames = Arrays.asList(
                     ButtonName.OK,
                     ButtonName.SEEKLEFT, ButtonName.SEEKRIGHT,
-                    ButtonName.TUNEUP, ButtonName.TUNEDOWN));
+                    ButtonName.TUNEUP, ButtonName.TUNEDOWN,
+                    ButtonName.PRESET_1, ButtonName.PRESET_2, ButtonName.PRESET_3, ButtonName.PRESET_4,
+                    ButtonName.PRESET_5, ButtonName.PRESET_6, ButtonName.PRESET_7, ButtonName.PRESET_8,
+                    ButtonName.PRESET_9, ButtonName.PRESET_0);
 
+            for (ButtonName buttonName : buttonNames) {
+                proxy.subscribeButton(buttonName, nextCorrelationID());
+            }
+
+            ButtonNameParcel buttonNameParcel = new ButtonNameParcel(buttonNames);
             ProxyServiceAction.broadcastButtonsSubscribed(this, buttonNameParcel);
 
         } catch (SyncException e) {
@@ -214,29 +209,6 @@ public class ProxyAppLinkService extends Service implements IProxyListenerALM, A
         }
     }
 
-    @Override
-    public void onProxyClosed(String info, Exception e) {
-        Log.e("onProxyClosed: " + info, e);
-
-        boolean wasConnected = !firstHMIStatusChange;
-        firstHMIStatusChange = true;
-
-        if (wasConnected) { // always false?
-            ProxyServiceAction.broadcastProxyClosed(this);
-        }
-
-        SyncExceptionCause syncExceptionCause = ((SyncException) e).getSyncExceptionCause();
-        if (syncExceptionCause != SYNC_PROXY_CYCLED && syncExceptionCause != BLUETOOTH_DISABLED) {
-            resetConnection();
-        }
-    }
-
-    @Override
-    public void onError(String info, Exception e) {
-        Log.e("******onProxyError******");
-        Log.e("ERROR: " + info, e);
-    }
-
     /**
      * ******************************
      * * SYNC AppLink Base Callback's **
@@ -255,6 +227,46 @@ public class ProxyAppLinkService extends Service implements IProxyListenerALM, A
 
         CreateChoiceSetParcel createChoiceSetParcel = new CreateChoiceSetParcel(response);
         ProxyServiceAction.broadcastCreateInteractionChoiceSetResponded(this, createChoiceSetParcel);
+    }
+
+    @Override
+    public void onOnDriverDistraction(OnDriverDistraction notification) {
+        Log.d(notification.toString());
+        if (notification.getState() == DriverDistractionState.DD_OFF) {
+            Log.i("clear lock, DD_OFF");
+            clearLockScreen();
+        } else {
+            Log.i("show lockscreen, DD_ON");
+            showLockScreen();
+        }
+    }
+
+    @Override
+    public void onOnButtonPress(OnButtonPress notification) {
+        Log.d(notification.toString());
+
+        ButtonName buttonName = notification.getButtonName();
+        switch (buttonName) {
+            case OK:
+                Log.d("Ok pressed");
+                break;
+            case SEEKLEFT:
+                Log.d("Seek left pressed");
+                break;
+            case SEEKRIGHT:
+                Log.d("Seek right pressed");
+                break;
+            case TUNEUP:
+                Log.d("Tune up pressed");
+                break;
+            case TUNEDOWN:
+                Log.d("Tune down pressed");
+                break;
+            default:
+                Log.d("Something else pressed: " + buttonName);
+                break;
+        }
+        ProxyServiceAction.broadcastButtonPressed(this, new ButtonPressedParcel(buttonName));
     }
 
     @Override
@@ -313,18 +325,6 @@ public class ProxyAppLinkService extends Service implements IProxyListenerALM, A
     }
 
     @Override
-    public void onOnDriverDistraction(OnDriverDistraction notification) {
-        Log.d(notification.toString());
-        if (notification.getState() == DriverDistractionState.DD_OFF) {
-            Log.i("clear lock, DD_OFF");
-            clearLockScreen();
-        } else {
-            Log.i("show lockscreen, DD_ON");
-            showLockScreen();
-        }
-    }
-
-    @Override
     public void onGenericResponse(GenericResponse response) {
 
         Log.d(response.toString());
@@ -334,33 +334,6 @@ public class ProxyAppLinkService extends Service implements IProxyListenerALM, A
     public void onOnButtonEvent(OnButtonEvent notification) {
 
         Log.d(notification.toString());
-    }
-
-    @Override
-    public void onOnButtonPress(OnButtonPress notification) {
-
-        Log.d(notification.toString());
-
-        switch (notification.getButtonName()) {
-            case OK:
-                Log.d("Ok pressed");
-                break;
-            case SEEKLEFT:
-                Log.d("Seek left pressed");
-                break;
-            case SEEKRIGHT:
-                Log.d("Seek right pressed");
-                break;
-            case TUNEUP:
-                Log.d("Tune up pressed");
-                break;
-            case TUNEDOWN:
-                Log.d("Tune down pressed");
-                break;
-            default:
-                Log.d("Something else pressed: " + notification.getButtonName());
-                break;
-        }
     }
 
     /**
@@ -419,6 +392,29 @@ public class ProxyAppLinkService extends Service implements IProxyListenerALM, A
     public void onOnEncodedSyncPData(OnEncodedSyncPData notification) {
 
         Log.d(notification.toString());
+    }
+
+    @Override
+    public void onProxyClosed(String info, Exception e) {
+        Log.e("onProxyClosed: " + info, e);
+
+        boolean wasConnected = !firstHMIStatusChange;
+        firstHMIStatusChange = true;
+
+        if (wasConnected) { // always false?
+            ProxyServiceAction.broadcastProxyClosed(this);
+        }
+
+        SyncExceptionCause syncExceptionCause = ((SyncException) e).getSyncExceptionCause();
+        if (syncExceptionCause != SYNC_PROXY_CYCLED && syncExceptionCause != BLUETOOTH_DISABLED) {
+            resetConnection();
+        }
+    }
+
+    @Override
+    public void onError(String info, Exception e) {
+        Log.e("******onProxyError******");
+        Log.e("ERROR: " + info, e);
     }
 
     @Override

@@ -18,16 +18,11 @@ import com.ford.syncV4.demofull.activity.dialog.SendMessageDialog;
 import com.ford.syncV4.demofull.logging.Log;
 import com.ford.syncV4.library.AppLinkActivity;
 import com.ford.syncV4.library.service.AppLinkServiceConnection;
-import com.ford.syncV4.library.service.ButtonNameParcel;
 import com.ford.syncV4.library.service.CreateChoiceSetParcel;
 import com.ford.syncV4.library.service.ProxyServiceAction;
 import com.ford.syncV4.proxy.RPCMessage;
-import com.ford.syncV4.proxy.rpc.enums.ButtonName;
 
 import java.util.ArrayList;
-import java.util.List;
-
-import static com.ford.syncV4.library.service.ButtonNameParcel.EXTRA_BUTTON_NAME_PARCEL;
 
 public class AppLinkTesterActivity extends AppLinkActivity implements OnClickListener {
 
@@ -163,9 +158,6 @@ public class AppLinkTesterActivity extends AppLinkActivity implements OnClickLis
             String action = intent.getAction();
             if (ProxyServiceAction.ACTION_PROXY_CLOSED.equals(action)) {
                 onProxyClosed();
-            } else if (ProxyServiceAction.ACTION_BUTTONS_SUBSCRIBED.equals(action)) {
-                ButtonNameParcel buttonNameParcel = (ButtonNameParcel) intent.getSerializableExtra(EXTRA_BUTTON_NAME_PARCEL);
-                onButtonsSubscribed(buttonNameParcel.getButtonNames());
             } else if (ProxyServiceAction.ACTION_CREATE_INTERACTION_CHOICE_RESPONSE.equals(action)) {
                 CreateChoiceSetParcel createChoiceSetParcel = (CreateChoiceSetParcel) intent.getSerializableExtra(CreateChoiceSetParcel.EXTRA_CREATE_CHOICE_SET_PARCEL);
                 onCreateChoiceSetResponse(createChoiceSetParcel.isSuccessful());
@@ -182,18 +174,6 @@ public class AppLinkTesterActivity extends AppLinkActivity implements OnClickLis
         Log.d("onProxyClosed");
         sendMessageDialog = null;
         _msgAdapter.logMessage("Disconnected", true);
-    }
-
-    /**
-     * Called when the app is activated from HMI for the first time. ProxyAppLinkService
-     * automatically subscribes to buttons, so we reflect that in the
-     * subscription list.
-     */
-    private void onButtonsSubscribed(List<ButtonName> buttons) {
-        Log.d("onButtonsSubscribed");
-        if (sendMessageDialog != null) { // change to a fragment then change this behaviour
-            sendMessageDialog.setSubscribedButtons(buttons);
-        }
     }
 
     /**
