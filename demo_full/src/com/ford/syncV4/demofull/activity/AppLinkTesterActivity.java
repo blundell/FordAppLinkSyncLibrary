@@ -18,6 +18,7 @@ import com.ford.syncV4.demofull.activity.dialog.SendMessageDialog;
 import com.ford.syncV4.demofull.logging.Log;
 import com.ford.syncV4.library.AppLinkActivity;
 import com.ford.syncV4.library.service.AppLinkServiceConnection;
+import com.ford.syncV4.library.service.ButtonPressedParcel;
 import com.ford.syncV4.library.service.CreateChoiceSetParcel;
 import com.ford.syncV4.library.service.ProxyServiceAction;
 import com.ford.syncV4.proxy.RPCMessage;
@@ -67,7 +68,6 @@ public class AppLinkTesterActivity extends AppLinkActivity implements OnClickLis
 
     private static final int PROXY_START = 5;
     private static final int MNU_CLEAR = 10;
-    private static final int MNU_UNREGISTER = 14;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -75,7 +75,6 @@ public class AppLinkTesterActivity extends AppLinkActivity implements OnClickLis
         if (result) {
             menu.add(0, PROXY_START, 0, "Proxy Start");
             menu.add(0, MNU_CLEAR, 0, "Clear Messages");
-            menu.add(0, MNU_UNREGISTER, 0, "Unregister");
             return true;
         } else {
             return false;
@@ -107,10 +106,6 @@ public class AppLinkTesterActivity extends AppLinkActivity implements OnClickLis
                 return true;
             case MNU_CLEAR:
                 _msgAdapter.clear();
-                return true;
-            case MNU_UNREGISTER:
-                stopAppLinkService();
-                startAppLinkService(null);
                 return true;
         }
 
@@ -163,6 +158,9 @@ public class AppLinkTesterActivity extends AppLinkActivity implements OnClickLis
                 onCreateChoiceSetResponse(createChoiceSetParcel.isSuccessful());
             } else if (ProxyServiceAction.ACTION_TEST_CUSTOM_COMMAND.equals(action)) {
                 Toast.makeText(AppLinkTesterActivity.this, "Received a custom command", Toast.LENGTH_SHORT).show();
+            } else if (ProxyServiceAction.ACTION_BUTTON_PRESSED.equals(action)) {
+                ButtonPressedParcel buttonParcel = (ButtonPressedParcel) intent.getSerializableExtra(ButtonPressedParcel.EXTRA_BUTTON_PRESSED_PARCEL);
+                Toast.makeText(AppLinkTesterActivity.this, "Button Pressed : " + buttonParcel.getButtonName().toString(), Toast.LENGTH_SHORT).show();
             }
         }
     };

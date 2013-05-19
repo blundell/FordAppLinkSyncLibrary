@@ -28,10 +28,9 @@ import static com.ford.syncV4.exception.SyncExceptionCause.SYNC_PROXY_CYCLED;
 
 public class ProxyAppLinkService extends Service implements IProxyListenerALM, AppLinkService {
     private static final int COMMAND_ID_CUSTOM = 100;
-    private static SyncProxyALM proxy;
 
-    private boolean firstHMIStatusChange = true;
     private int autoIncrementedCorrId = 1;
+    private SyncProxyALM proxy;
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -109,7 +108,7 @@ public class ProxyAppLinkService extends Service implements IProxyListenerALM, A
 
     @Override
     public void onOnHMIStatus(OnHMIStatus notification) {
-        Log.d("OnHMIStatus notificiation ");
+        Log.d("OnHMIStatus notification ");
 
         switch (notification.getAudioStreamingState()) {
             case AUDIBLE:
@@ -199,7 +198,6 @@ public class ProxyAppLinkService extends Service implements IProxyListenerALM, A
     @Override
     public void onOnCommand(OnCommand notification) {
         Log.d("An OnCommand was received. " + notification.getCmdID());
-
         switch (notification.getCmdID()) {
             case COMMAND_ID_CUSTOM:
                 ProxyServiceAction.broadcastTestCustomCommand(this);
@@ -211,18 +209,16 @@ public class ProxyAppLinkService extends Service implements IProxyListenerALM, A
 
     /**
      * ******************************
-     * * SYNC AppLink Base Callback's **
+     * * SYNC AppLink Base Callbacks **
      * *******************************
      */
     @Override
     public void onAddSubMenuResponse(AddSubMenuResponse response) {
-
         Log.d(response.toString());
     }
 
     @Override
     public void onCreateInteractionChoiceSetResponse(CreateInteractionChoiceSetResponse response) {
-
         Log.d(response.toString());
 
         CreateChoiceSetParcel createChoiceSetParcel = new CreateChoiceSetParcel(response);
@@ -236,7 +232,7 @@ public class ProxyAppLinkService extends Service implements IProxyListenerALM, A
             Log.i("clear lock, DD_OFF");
             clearLockScreen();
         } else {
-            Log.i("show lockscreen, DD_ON");
+            Log.i("show lock screen, DD_ON");
             showLockScreen();
         }
     }
@@ -271,19 +267,16 @@ public class ProxyAppLinkService extends Service implements IProxyListenerALM, A
 
     @Override
     public void onDeleteCommandResponse(DeleteCommandResponse response) {
-
         Log.d(response.toString());
     }
 
     @Override
     public void onDeleteInteractionChoiceSetResponse(DeleteInteractionChoiceSetResponse response) {
-
         Log.d(response.toString());
     }
 
     @Override
     public void onDeleteSubMenuResponse(DeleteSubMenuResponse response) {
-
         Log.d(response.toString());
     }
 
@@ -296,114 +289,96 @@ public class ProxyAppLinkService extends Service implements IProxyListenerALM, A
 
     @Override
     public void onResetGlobalPropertiesResponse(ResetGlobalPropertiesResponse response) {
-
         Log.d(response.toString());
     }
 
     @Override
     public void onSetMediaClockTimerResponse(SetMediaClockTimerResponse response) {
-
         Log.d(response.toString());
     }
 
     @Override
     public void onSpeakResponse(SpeakResponse response) {
-
         Log.d(response.toString());
     }
 
     @Override
     public void onSubscribeButtonResponse(SubscribeButtonResponse response) {
-
         Log.d(response.toString());
     }
 
     @Override
     public void onUnsubscribeButtonResponse(UnsubscribeButtonResponse response) {
-
         Log.d(response.toString());
     }
 
     @Override
     public void onGenericResponse(GenericResponse response) {
-
         Log.d(response.toString());
     }
 
     @Override
     public void onOnButtonEvent(OnButtonEvent notification) {
-
         Log.d(notification.toString());
     }
 
     /**
      * ******************************
-     * * SYNC AppLink Updated Callback's **
+     * * SYNC AppLink Updated Callbacks **
      * *******************************
      */
     @Override
     public void onAddCommandResponse(AddCommandResponse response) {
-
         Log.d(response.toString());
     }
 
     @Override
     public void onAlertResponse(AlertResponse response) {
-
         Log.d(response.toString());
     }
 
     @Override
     public void onPerformInteractionResponse(PerformInteractionResponse response) {
-
         Log.d(response.toString());
     }
 
     @Override
     public void onSetGlobalPropertiesResponse(SetGlobalPropertiesResponse response) {
-
         Log.d(response.toString());
     }
 
     @Override
     public void onShowResponse(ShowResponse response) {
-
         Log.d(response.toString());
     }
 
     @Override
     public void onOnTBTClientState(OnTBTClientState notification) {
-
         Log.d(notification.toString());
     }
 
     /**
      * ******************************
-     * * SYNC AppLink Policies Callback's **
+     * * SYNC AppLink Policies Callbacks **
      * *******************************
      */
     @Override
     public void onOnPermissionsChange(OnPermissionsChange notification) {
-
         Log.d(notification.toString());
     }
 
     @Override
     public void onOnEncodedSyncPData(OnEncodedSyncPData notification) {
-
         Log.d(notification.toString());
     }
+
+    // -- end
 
     @Override
     public void onProxyClosed(String info, Exception e) {
         Log.e("onProxyClosed: " + info, e);
 
-        boolean wasConnected = !firstHMIStatusChange;
-        firstHMIStatusChange = true;
-
-        if (wasConnected) { // always false?
-            ProxyServiceAction.broadcastProxyClosed(this);
-        }
+        ProxyServiceAction.broadcastProxyClosed(this);
 
         SyncExceptionCause syncExceptionCause = ((SyncException) e).getSyncExceptionCause();
         if (syncExceptionCause != SYNC_PROXY_CYCLED && syncExceptionCause != BLUETOOTH_DISABLED) {
@@ -419,7 +394,6 @@ public class ProxyAppLinkService extends Service implements IProxyListenerALM, A
 
     @Override
     public void onDestroy() {
-        Log.d("ProxyAppLinkService.onDestroy");
         disposeSyncProxy();
         clearLockScreen();
         super.onDestroy();
