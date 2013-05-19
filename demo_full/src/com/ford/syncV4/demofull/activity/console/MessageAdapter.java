@@ -1,4 +1,4 @@
-package com.ford.syncV4.demofull.console;
+package com.ford.syncV4.demofull.activity.console;
 
 import android.content.Context;
 import android.graphics.Color;

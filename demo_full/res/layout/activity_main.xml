@@ -16,7 +16,7 @@
     android:layout_height="wrap_content"
     android:text="Send Message" />
 
-  <com.ford.syncV4.demofull.activity.widget.ConsoleListView
+  <com.ford.syncV4.demofull.activity.console.ConsoleListView
     android:id="@+id/messageList"
     android:layout_height="match_parent"
     android:layout_width="match_parent" />

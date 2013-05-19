@@ -16,7 +16,7 @@ import android.widget.Toast;
 import com.ford.syncV4.demofull.R;
 import com.ford.syncV4.demofull.activity.dialog.PropertiesDialog;
 import com.ford.syncV4.demofull.activity.dialog.SendMessageDialog;
-import com.ford.syncV4.demofull.console.LogAdapter;
+import com.ford.syncV4.demofull.activity.console.LogAdapter;
 import com.ford.syncV4.demofull.logging.Log;
 import com.ford.syncV4.library.persistance.ConnectionPreferences;
 import com.ford.syncV4.library.persistance.Const;
