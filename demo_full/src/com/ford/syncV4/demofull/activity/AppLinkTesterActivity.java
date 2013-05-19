@@ -17,7 +17,6 @@ import com.ford.syncV4.demofull.activity.console.LogAdapter;
 import com.ford.syncV4.demofull.activity.dialog.SendMessageDialog;
 import com.ford.syncV4.demofull.logging.Log;
 import com.ford.syncV4.library.AppLinkActivity;
-import com.ford.syncV4.library.persistance.Const;
 import com.ford.syncV4.library.service.AppLinkServiceConnection;
 import com.ford.syncV4.library.service.ButtonNameParcel;
 import com.ford.syncV4.library.service.CreateChoiceSetParcel;
@@ -67,7 +66,7 @@ public class AppLinkTesterActivity extends AppLinkActivity implements OnClickLis
      */
     private void showPropertiesInTitle() {
         boolean isMedia = getResources().getBoolean(R.bool.is_media_app);
-        String transportType = getResources().getBoolean(R.bool.debug_using_tcp) ? Const.Transport.TCP : Const.Transport.BLUETOOTH;
+        String transportType = getResources().getBoolean(R.bool.debug_using_tcp) ? "WiFi" : "Bluetooth";
         setTitle(getString(R.string.app_name) + " (" + (isMedia ? "" : "non-") + "media, " + transportType + ")");
     }
 

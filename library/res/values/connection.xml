@@ -3,7 +3,7 @@
   <bool name="is_media_app">false</bool>
 
   <bool name="debug_using_tcp">true</bool>
-  <string name="debug_ip">10.0.0.2</string>
+  <string name="debug_ip">10.0.2.2</string>
   <integer name="debug_port">50007</integer>
   <bool name="debug_auto_reconnect">true</bool>
 </resources>
