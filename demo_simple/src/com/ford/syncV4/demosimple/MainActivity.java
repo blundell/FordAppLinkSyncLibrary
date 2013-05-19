@@ -20,6 +20,12 @@ public class MainActivity extends AppLinkActivity {
 
     @Override
     public void startAppLinkService(AppLinkServiceConnection.ServiceListener listener) {
+        if (isPairedWithCar()) {
+            super.startAppLinkService(listener);
+        }
+    }
+
+    private boolean isPairedWithCar() {
         boolean isSYNCpaired = false;
         // Get the local Bluetooth adapter
         BluetoothAdapter mBtAdapter = BluetoothAdapter.getDefaultAdapter();
@@ -44,11 +50,8 @@ public class MainActivity extends AppLinkActivity {
                 } else {
                     Log.i("TAG", "No Paired devices with the name sync");
                 }
-
-                if (isSYNCpaired) {
-                    super.startAppLinkService(listener);
-                }
             }
         }
+        return isSYNCpaired;
     }
 }
