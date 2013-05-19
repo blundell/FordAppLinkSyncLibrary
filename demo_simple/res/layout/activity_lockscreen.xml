@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="fill_parent"
+  android:layout_height="fill_parent"
+  android:gravity="bottom|center_horizontal|center_vertical|clip_horizontal"
+  android:orientation="vertical"
+  tools:context=".LockScreenActivity">
+
+  <ImageView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:contentDescription="Sync"
+    android:layout_height="match_parent"
+    android:src="@drawable/sync" />
+
+</LinearLayout>

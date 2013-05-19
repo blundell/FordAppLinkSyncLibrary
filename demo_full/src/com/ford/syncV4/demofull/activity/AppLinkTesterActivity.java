@@ -5,7 +5,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -14,13 +13,17 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.ford.syncV4.demofull.R;
+import com.ford.syncV4.demofull.activity.console.LogAdapter;
 import com.ford.syncV4.demofull.activity.dialog.PropertiesDialog;
 import com.ford.syncV4.demofull.activity.dialog.SendMessageDialog;
-import com.ford.syncV4.demofull.activity.console.LogAdapter;
 import com.ford.syncV4.demofull.logging.Log;
+import com.ford.syncV4.library.AppLinkActivity;
 import com.ford.syncV4.library.persistance.ConnectionPreferences;
 import com.ford.syncV4.library.persistance.Const;
-import com.ford.syncV4.library.service.*;
+import com.ford.syncV4.library.service.AppLinkServiceConnection;
+import com.ford.syncV4.library.service.ButtonNameParcel;
+import com.ford.syncV4.library.service.CreateChoiceSetParcel;
+import com.ford.syncV4.library.service.ProxyServiceAction;
 import com.ford.syncV4.proxy.RPCMessage;
 import com.ford.syncV4.proxy.rpc.enums.ButtonName;
 
@@ -29,9 +32,8 @@ import java.util.List;
 
 import static com.ford.syncV4.library.service.ButtonNameParcel.EXTRA_BUTTON_NAME_PARCEL;
 
-public class AppLinkTesterActivity extends FragmentActivity implements OnClickListener {
+public class AppLinkTesterActivity extends AppLinkActivity implements OnClickListener {
 
-    private AppLinkServiceConnection appLinkServiceConnection;
     private SendMessageDialog sendMessageDialog;
     private LogAdapter _msgAdapter;
 
@@ -57,7 +59,6 @@ public class AppLinkTesterActivity extends FragmentActivity implements OnClickLi
             showConnectionSetupDialog();
         } else {
             showPropertiesInTitle();
-            startSyncProxy();
         }
     }
 
@@ -77,8 +78,9 @@ public class AppLinkTesterActivity extends FragmentActivity implements OnClickLi
                 .setOnClickListener(new PropertiesDialog.PropertiesDialogClickListener() {
                     @Override
                     public void onPropertiesSelected() {
+                        stopAppLinkService();
                         showPropertiesInTitle();
-                        startSyncProxy();
+                        startAppLinkService(null);
                     }
                 }).temp().show(); // Move to another Activity, make it a fragment?
     }
@@ -91,15 +93,6 @@ public class AppLinkTesterActivity extends FragmentActivity implements OnClickLi
         boolean isMedia = connectionPreferences.isAnMediaApp();
         String transportType = connectionPreferences.getTransportType() == Const.Transport.KEY_TCP ? Const.Transport.TCP : Const.Transport.BLUETOOTH;
         setTitle(getString(R.string.app_name) + " (" + (isMedia ? "" : "non-") + "media, " + transportType + ")");
-    }
-
-    private void startSyncProxy() {
-        bindToProxyService(null);
-    }
-
-    private void bindToProxyService(AppLinkServiceConnection.ServiceListener listener) {
-        appLinkServiceConnection = new AppLinkServiceConnection(listener);
-        bindService(new Intent(this, ProxyAppLinkService.class), appLinkServiceConnection, Context.BIND_AUTO_CREATE);
     }
 
     private static final int PROXY_START = 5;
@@ -128,11 +121,11 @@ public class AppLinkTesterActivity extends FragmentActivity implements OnClickLi
                     mBtAdapter.enable();
                 }
 
-                bindToProxyService(new AppLinkServiceConnection.ServiceListener() {
+                startAppLinkService(new AppLinkServiceConnection.ServiceListener() {
                     @Override
                     public void onProxyServiceStarted() {
                         Log.d("Service started and onOptionsItem knows it");
-                        appLinkServiceConnection.resetConnection();
+                        getAppLinkService().resetConnection();
                     }
                 });
 
@@ -146,8 +139,8 @@ public class AppLinkTesterActivity extends FragmentActivity implements OnClickLi
                 _msgAdapter.clear();
                 return true;
             case MNU_UNREGISTER:
-                endSyncProxyInstance();
-                startSyncProxy();
+                stopAppLinkService();
+                startAppLinkService(null);
                 return true;
         }
 
@@ -165,12 +158,12 @@ public class AppLinkTesterActivity extends FragmentActivity implements OnClickLi
                 @Override
                 public void onSendMessage(RPCMessage message, int correlationIdUsed) {
                     _msgAdapter.logMessage(message, true);
-                    appLinkServiceConnection.sendRPCRequest(message);
+                    getAppLinkService().sendRPCRequest(message);
                     sendMessageDialog = null; // hack till we do fragments
                 }
             });
         } else if (id == R.id.btnPlayPause) {
-            appLinkServiceConnection.playPauseAudio();
+            getAppLinkService().playPauseAudio();
         }
     }
 
@@ -236,18 +229,6 @@ public class AppLinkTesterActivity extends FragmentActivity implements OnClickLi
         if (sendMessageDialog != null) {
             sendMessageDialog.updateChoiceSet(success);
         }
-    }
-
-    @Override
-    protected void onDestroy() {
-        endSyncProxyInstance();
-        super.onDestroy();
-    }
-
-    //upon onDestroy(), dispose current proxy and create a new one to enable auto-start
-    private void endSyncProxyInstance() {
-        appLinkServiceConnection.resetConnection();
-        unbindService(appLinkServiceConnection);
     }
 }
 

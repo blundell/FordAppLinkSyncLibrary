@@ -28,8 +28,6 @@
       android:screenOrientation="portrait"
       android:name=".LockScreenActivity" />
 
-    <service android:name=".AppLinkService" />
-
     <receiver android:name=".AppLinkReceiver">
       <intent-filter>
         <action android:name="android.bluetooth.adapter.action.STATE_CHANGED" />

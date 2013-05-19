@@ -1,61 +1,25 @@
-/**Ford Motor Company
- * September 2012
- * Elizabeth Halash
- */
-
 package com.ford.syncV4.demosimple;
 
-import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 
-import com.ford.syncV4.proxy.SyncProxyALM;
+import com.ford.syncV4.library.AppLinkActivity;
+import com.ford.syncV4.library.service.AppLinkServiceConnection;
 
 import java.util.Set;
 
-public class MainActivity extends Activity {
-
-    private static final String TAG = "hello";
-    private static MainActivity instance = null;
-    private boolean activityOnTop;
-
-    public static MainActivity getInstance() {
-        return instance;
-    }
+public class MainActivity extends AppLinkActivity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        instance = this;
-        startSyncProxyService();
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.activity_main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle item selection
-        switch (item.getItemId()) {
-            case R.id.reset:
-                endSyncProxyInstance();
-                startSyncProxyService();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
-
-    public void startSyncProxyService() {
+    public void startAppLinkService(AppLinkServiceConnection.ServiceListener listener) {
         boolean isSYNCpaired = false;
         // Get the local Bluetooth adapter
         BluetoothAdapter mBtAdapter = BluetoothAdapter.getDefaultAdapter();
@@ -78,76 +42,13 @@ public class MainActivity extends Activity {
                         }
                     }
                 } else {
-                    Log.i("TAG", "A No Paired devices with the name sync");
+                    Log.i("TAG", "No Paired devices with the name sync");
                 }
 
                 if (isSYNCpaired) {
-                    if (AppLinkService.getInstance() == null) {
-                        Intent startIntent = new Intent(this, AppLinkService.class);
-                        startService(startIntent);
-                    } else {
-                        //if the service is already running and proxy is up, set this as current UI activity
-                        AppLinkService.getInstance().setCurrentActivity(this);
-                        Log.i("TAG", " proxyAlive == true success");
-                    }
+                    super.startAppLinkService(listener);
                 }
             }
         }
-    }
-
-    //upon onDestroy(), dispose current proxy and create a new one to enable auto-start
-    //call resetProxy() to do so
-    public void endSyncProxyInstance() {
-        AppLinkService serviceInstance = AppLinkService.getInstance();
-        if (serviceInstance != null) {
-            SyncProxyALM proxyInstance = serviceInstance.getProxy();
-            //if proxy exists, reset it
-            if (proxyInstance != null) {
-                serviceInstance.reset();
-                //if proxy == null create proxy
-            } else {
-                serviceInstance.startProxy();
-            }
-        }
-    }
-
-    @Override
-    protected void onPause() {
-        activityOnTop = false;
-        super.onPause();
-    }
-
-    @Override
-    protected void onResume() {
-        activityOnTop = true;
-        //check if lockscreen should be up
-        AppLinkService serviceInstance = AppLinkService.getInstance();
-        if (serviceInstance != null) {
-            if (serviceInstance.getLockScreenStatus()) {
-                if (LockScreenActivity.getInstance() == null) {
-                    Intent i = new Intent(this, LockScreenActivity.class);
-                    i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    i.addFlags(Intent.FLAG_ACTIVITY_NO_USER_ACTION);
-                    startActivity(i);
-                }
-            }
-        }
-        super.onResume();
-    }
-
-    @Override
-    protected void onDestroy() {
-        Log.v(TAG, "onDestroy main");
-        endSyncProxyInstance();
-        instance = null;
-        AppLinkService serviceInstance = AppLinkService.getInstance();
-        if (serviceInstance != null) {
-            serviceInstance.setCurrentActivity(null);
-        }
-        super.onDestroy();
-    }
-
-    public boolean isActivityonTop() {
-        return activityOnTop;
     }
 }
