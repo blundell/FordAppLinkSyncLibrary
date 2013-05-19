@@ -28,16 +28,6 @@
       android:screenOrientation="portrait"
       android:name=".LockScreenActivity" />
 
-    <receiver android:name=".AppLinkReceiver">
-      <intent-filter>
-        <action android:name="android.bluetooth.adapter.action.STATE_CHANGED" />
-        <action android:name="android.bluetooth.device.action.ACL_CONNECTED" />
-        <action android:name="android.bluetooth.device.action.ACL_DISCONNECTED" />
-        <action android:name="android.intent.action.BOOT_COMPLETED" />
-        <action android:name="android.media.AUDIO_BECOMING_NOISY" />
-      </intent-filter>
-    </receiver>
-
   </application>
 
 

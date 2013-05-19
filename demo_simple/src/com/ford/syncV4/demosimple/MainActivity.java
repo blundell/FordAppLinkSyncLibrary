@@ -22,6 +22,8 @@ public class MainActivity extends AppLinkActivity {
     public void startAppLinkService(AppLinkServiceConnection.ServiceListener listener) {
         if (isPairedWithCar()) {
             super.startAppLinkService(listener);
+        } else {
+            Log.e("TAG", "BT disabled or Not Paired.");
         }
     }
 
@@ -40,15 +42,11 @@ public class MainActivity extends AppLinkActivity {
                 Set<BluetoothDevice> pairedDevices = mBtAdapter.getBondedDevices();
 
                 // Check if there is a paired device with the name "SYNC"
-                if (pairedDevices.size() > 0) {
-                    for (BluetoothDevice device : pairedDevices) {
-                        if (device.getName().equals("SYNC")) {
-                            isSYNCpaired = true;
-                            break;
-                        }
+                for (BluetoothDevice device : pairedDevices) {
+                    if (device.getName().equals("SYNC")) {
+                        isSYNCpaired = true;
+                        break;
                     }
-                } else {
-                    Log.i("TAG", "No Paired devices with the name sync");
                 }
             }
         }

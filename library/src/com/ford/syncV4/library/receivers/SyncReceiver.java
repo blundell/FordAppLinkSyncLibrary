@@ -1,6 +1,7 @@
 package com.ford.syncV4.library.receivers;
 
 import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -21,7 +22,12 @@ public class SyncReceiver extends BroadcastReceiver {
         this.intent = intent;
         this.serviceInstance = peekService(context);
 
-        if (phoneJustTurnedOn() && phoneHasBluetoothOn()) {
+        BluetoothDevice bluetoothDevice = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+        if (intent.getAction().equals(BluetoothDevice.ACTION_ACL_CONNECTED) && bluetoothDevice.getName().contains("SYNC")) {
+            startService(context);
+        } else if (intent.getAction().equals(BluetoothDevice.ACTION_ACL_DISCONNECTED) && bluetoothDevice.getName().contains("SYNC")) {
+            stopService(context);
+        } else if (phoneJustTurnedOn() && phoneHasBluetoothOn()) {
             startService(context);
         } else if (changeOfBluetoothState()) {
             if (bluetoothTurningOff()) {
@@ -40,7 +46,8 @@ public class SyncReceiver extends BroadcastReceiver {
             }
         } else if (audioBecomingTooNoisy()) {
             if (serviceRunning()) {
-                serviceInstance.playPauseAudio();
+//                serviceInstance.playPauseAudio();
+                // Pause any audio
             }
         }
     }

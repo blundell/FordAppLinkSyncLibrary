@@ -10,8 +10,7 @@
   <!-- Required to pair Bluetooth devices -->
   <uses-permission android:name="android.permission.BLUETOOTH" />
   <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
-  <!-- -->
-  <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+  <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
   <uses-sdk
     android:minSdkVersion="8"
@@ -26,12 +25,12 @@
 
     <receiver android:name=".receivers.SyncReceiver">
       <intent-filter>
+        <action android:name="android.bluetooth.adapter.action.STATE_CHANGED" />
         <action android:name="android.bluetooth.device.action.ACL_CONNECTED" />
         <action android:name="android.bluetooth.device.action.ACL_DISCONNECTED" />
+        <action android:name="android.intent.action.BOOT_COMPLETED" />
         <action android:name="android.media.AUDIO_BECOMING_NOISY" />
         <action android:name="android.intent.action.MEDIA_BUTTON" />
-        <action android:name="android.intent.action.BOOT_COMPLETED" />
-        <action android:name="android.bluetooth.adapter.action.STATE_CHANGED" />
       </intent-filter>
     </receiver>
 
