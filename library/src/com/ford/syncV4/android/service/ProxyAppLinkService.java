@@ -170,8 +170,8 @@ public class ProxyAppLinkService extends Service implements IProxyListenerALM, A
 
         switch (notification.getHmiLevel()) {
             case HMI_FULL:
+                showLockScreen();
                 if (notification.getFirstRun()) {
-                    showLockMain();
                     initialize();
                 } else {
                     try {
@@ -182,20 +182,27 @@ public class ProxyAppLinkService extends Service implements IProxyListenerALM, A
                 }
                 break;
             case HMI_LIMITED:
+                showLockScreen();
                 break;
             case HMI_BACKGROUND:
+                showLockScreen();
                 break;
             case HMI_NONE:
+                clearLockScreen();
                 break;
             default:
                 break;
         }
     }
 
-    private void showLockMain() {
+    private void showLockScreen() {
         Intent i = new Intent(this, AppLinkTesterActivity.class);
         i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
         startActivity(i);
+    }
+
+    private void clearLockScreen() {
+
     }
 
     private void initialize() {
