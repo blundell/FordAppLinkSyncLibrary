@@ -1,30 +1,35 @@
 package com.ford.syncV4.demosimple;
 
+import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.ford.syncV4.library.AppLinkActivity;
-import com.ford.syncV4.library.service.AppLinkServiceConnection;
+import com.ford.syncV4.library.AppLink;
+import com.ford.syncV4.library.AppLinkComposite;
 
 import java.util.Set;
 
 /**
- * Extends the AppLinkActivity that manages the connection to the Sync Service
+ * If you need to extend another Activity you can use the AppLinkComposite directly
+ * just ensure you it to the correct Activity lifecycle methods
  */
-public class MainActivity extends AppLinkActivity {
+public class AlternativeMainActivity extends Activity {
+
+    private AppLink appLinkComposite;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        appLinkComposite = new AppLinkComposite(this);
+        startAppLinkService();
     }
 
-    @Override
-    public void startAppLinkService(AppLinkServiceConnection.ServiceListener listener) {
+    private void startAppLinkService() {
         if (isPairedWithCar()) {
-            super.startAppLinkService(listener);
+            appLinkComposite.startAppLinkService(null);
         } else {
             Log.e("TAG", "BT disabled or Not Paired.");
         }
@@ -54,5 +59,15 @@ public class MainActivity extends AppLinkActivity {
             }
         }
         return isSYNCpaired;
+    }
+
+    @Override
+    protected void onDestroy() {
+        stopAppLinkService();
+        super.onDestroy();
+    }
+
+    private void stopAppLinkService() {
+        appLinkComposite.stopAppLinkService();
     }
 }

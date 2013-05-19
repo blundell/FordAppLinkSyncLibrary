@@ -163,7 +163,8 @@ public class AppLinkTesterActivity extends AppLinkActivity implements OnClickLis
                 }
             });
         } else if (id == R.id.btnPlayPause) {
-            getAppLinkService().playPauseAudio();
+            // somehow play audio
+            // make a music service in the library that could be extended?
         }
     }
 

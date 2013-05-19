@@ -16,7 +16,7 @@
     android:theme="@style/AppTheme">
     <activity
       android:name=".MainActivity"
-      android:label="@string/title_activity_main">
+      android:label="@string/title_activity_main_1">
       <intent-filter>
         <action android:name="android.intent.action.MAIN" />
 
@@ -24,8 +24,17 @@
       </intent-filter>
     </activity>
     <activity
-      android:label="Locked"
-      android:screenOrientation="portrait"
+      android:name=".AlternativeMainActivity"
+      android:label="@string/title_activity_main_2">
+      <intent-filter>
+        <action android:name="android.intent.action.MAIN" />
+
+        <category android:name="android.intent.category.LAUNCHER" />
+      </intent-filter>
+    </activity>
+    <activity
+      android:label="@string/title_activity_lockscreen"
+      android:configChanges="orientation|keyboard|keyboardHidden|layoutDirection|screenLayout"
       android:name=".LockScreenActivity" />
 
   </application>

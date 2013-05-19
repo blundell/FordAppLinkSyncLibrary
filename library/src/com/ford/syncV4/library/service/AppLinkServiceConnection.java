@@ -43,9 +43,4 @@ public class AppLinkServiceConnection implements ServiceConnection, AppLinkServi
     public void sendRPCRequest(RPCMessage message) {
         proxyService.sendRPCRequest(message);
     }
-
-    @Override
-    public void playPauseAudio() {
-        proxyService.playPauseAudio();
-    }
 }

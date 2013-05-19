@@ -1,8 +1,9 @@
 <resources>
 
-    <string name="app_name">HelloAppLink</string>
-    <string name="hello_world">Hello AppLink!</string>
-    <string name="exit">Exit</string>
-    <string name="title_activity_main">Hello AppLink</string>
+  <string name="app_name">HelloAppLink</string>
+  <string name="hello_world">Hello AppLink!</string>
+  <string name="title_activity_main_1">Hello AppLink 1</string>
+  <string name="title_activity_main_2">Hello AppLink 2</string>
+  <string name="title_activity_lockscreen">Locked</string>
 
 </resources>
