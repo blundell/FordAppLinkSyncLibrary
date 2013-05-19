@@ -3,7 +3,7 @@
  * Elizabeth Halash
  */
 
-package com.ford.helloapplink;
+package com.ford.syncV4.demosimple;
 
 import android.app.Service;
 import android.bluetooth.BluetoothAdapter;

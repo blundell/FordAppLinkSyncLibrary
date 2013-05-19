@@ -3,14 +3,13 @@
  * Elizabeth Halash
  */
 
-package com.ford.helloapplink;
+package com.ford.syncV4.demosimple;
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 
 public class AppLinkReceiver  extends BroadcastReceiver {
 		private static final String TAG = "hello";

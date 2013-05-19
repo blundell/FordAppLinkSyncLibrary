@@ -3,9 +3,8 @@
  * Elizabeth Halash
  */
 
-package com.ford.helloapplink;
+package com.ford.syncV4.demosimple;
 
-import com.ford.syncV4.exception.SyncException;
 import com.ford.syncV4.proxy.SyncProxyALM;
 
 import android.app.Activity;
