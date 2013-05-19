@@ -30,8 +30,6 @@ public class AppLinkService extends Service implements IProxyListenerALM {
     private static AppLinkService instance = null;
     //variable to contain the current state of the main UI ACtivity
     private MainActivity currentUIActivity;
-    //variable to access the BluetoothAdapter
-    private BluetoothAdapter mBtAdapter;
     //variable to create and call functions of the SyncProxy
     private SyncProxyALM proxy = null;
     //variable that keeps track of whether SYNC is sending driver distractions
@@ -42,10 +40,6 @@ public class AppLinkService extends Service implements IProxyListenerALM {
 
     public static AppLinkService getInstance() {
         return instance;
-    }
-
-    public MainActivity getCurrentActivity() {
-        return currentUIActivity;
     }
 
     public SyncProxyALM getProxy() {
@@ -65,7 +59,7 @@ public class AppLinkService extends Service implements IProxyListenerALM {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         if (intent != null) {
-            mBtAdapter = BluetoothAdapter.getDefaultAdapter();
+            BluetoothAdapter mBtAdapter = BluetoothAdapter.getDefaultAdapter();
             if (mBtAdapter != null) {
                 if (mBtAdapter.isEnabled()) {
                     startProxy();
@@ -131,11 +125,6 @@ public class AppLinkService extends Service implements IProxyListenerALM {
                 proxy.resetProxy();
             } catch (SyncException e1) {
                 e1.printStackTrace();
-                //something goes wrong, & the proxy returns as null, stop the service.
-                //do not want a running service with a null proxy
-                if (proxy == null) {
-                    stopSelf();
-                }
             }
         } else {
             startProxy();
@@ -169,7 +158,7 @@ public class AppLinkService extends Service implements IProxyListenerALM {
 
         switch (notification.getHmiLevel()) {
             case HMI_FULL:
-                if (driverdistrationNotif == false) {
+                if (!driverdistrationNotif) {
                     showLockScreen();
                 }
                 if (notification.getFirstRun()) {
@@ -195,12 +184,12 @@ public class AppLinkService extends Service implements IProxyListenerALM {
                 }
                 break;
             case HMI_LIMITED:
-                if (driverdistrationNotif == false) {
+                if (!driverdistrationNotif) {
                     showLockScreen();
                 }
                 break;
             case HMI_BACKGROUND:
-                if (driverdistrationNotif == false) {
+                if (!driverdistrationNotif) {
                     showLockScreen();
                 }
                 break;
@@ -219,7 +208,7 @@ public class AppLinkService extends Service implements IProxyListenerALM {
         //else, wait until onResume() to throw lockscreen so it doesn't
         //pop-up while a user is using another app on the phone
         if (currentUIActivity != null) {
-            if (currentUIActivity.isActivityonTop() == true) {
+            if (currentUIActivity.isActivityonTop()) {
                 if (LockScreenActivity.getInstance() == null) {
                     Intent i = new Intent(this, LockScreenActivity.class);
                     i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -339,8 +328,7 @@ public class AppLinkService extends Service implements IProxyListenerALM {
     }
 
     @Override
-    public void onResetGlobalPropertiesResponse(
-            ResetGlobalPropertiesResponse response) {
+    public void onResetGlobalPropertiesResponse(ResetGlobalPropertiesResponse response) {
         // TODO Auto-generated method stub
     }
 
