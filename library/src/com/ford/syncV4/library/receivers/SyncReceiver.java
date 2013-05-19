@@ -1,4 +1,4 @@
-package com.ford.syncV4.android.receivers;
+package com.ford.syncV4.library.receivers;
 
 import android.bluetooth.BluetoothAdapter;
 import android.content.BroadcastReceiver;
@@ -7,9 +7,9 @@ import android.content.Intent;
 import android.os.IBinder;
 import android.view.KeyEvent;
 
-import com.ford.syncV4.android.logging.Log;
-import com.ford.syncV4.android.service.AppLinkService;
-import com.ford.syncV4.android.service.ProxyAppLinkService;
+import com.ford.syncV4.library.logging.Log;
+import com.ford.syncV4.library.service.AppLinkService;
+import com.ford.syncV4.library.service.ProxyAppLinkService;
 
 public class SyncReceiver extends BroadcastReceiver {
     private Intent intent;

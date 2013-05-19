@@ -1,4 +1,4 @@
-package com.ford.syncV4.android.persistance;
+package com.ford.syncV4.library.persistance;
 
 import android.content.Context;
 import android.content.SharedPreferences;

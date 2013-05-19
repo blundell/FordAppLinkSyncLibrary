@@ -13,21 +13,21 @@ import android.view.View.OnClickListener;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.ford.syncV4.android.R;
+import com.ford.syncV4.library.R;
 import com.ford.syncV4.demofull.activity.dialog.PropertiesDialog;
 import com.ford.syncV4.demofull.activity.dialog.SendMessageDialog;
 import com.ford.syncV4.demofull.adapters.LogAdapter;
 import com.ford.syncV4.demofull.logging.Log;
-import com.ford.syncV4.android.persistance.ConnectionPreferences;
-import com.ford.syncV4.android.persistance.Const;
-import com.ford.syncV4.android.service.*;
+import com.ford.syncV4.library.persistance.ConnectionPreferences;
+import com.ford.syncV4.library.persistance.Const;
+import com.ford.syncV4.library.service.*;
 import com.ford.syncV4.proxy.RPCMessage;
 import com.ford.syncV4.proxy.rpc.enums.ButtonName;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.ford.syncV4.android.service.ButtonNameParcel.EXTRA_BUTTON_NAME_PARCEL;
+import static com.ford.syncV4.library.service.ButtonNameParcel.EXTRA_BUTTON_NAME_PARCEL;
 
 public class AppLinkTesterActivity extends FragmentActivity implements OnClickListener {
 

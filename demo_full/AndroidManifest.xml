@@ -31,7 +31,7 @@
       </intent-filter>
     </activity>
 
-    <service android:name="com.ford.syncV4.android.service.ProxyAppLinkService" />
+    <service android:name="com.ford.syncV4.library.service.ProxyAppLinkService" />
 
   </application>
 

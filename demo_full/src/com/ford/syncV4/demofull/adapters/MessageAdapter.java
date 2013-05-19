@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import com.ford.syncV4.android.R;
+import com.ford.syncV4.library.R;
 import com.ford.syncV4.proxy.RPCMessage;
 import com.ford.syncV4.proxy.constants.Names;
 import com.ford.syncV4.proxy.rpc.enums.Result;

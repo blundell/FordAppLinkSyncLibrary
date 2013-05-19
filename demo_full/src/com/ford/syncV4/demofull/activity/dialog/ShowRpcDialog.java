@@ -7,8 +7,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 
-import com.ford.syncV4.android.R;
-import com.ford.syncV4.android.persistance.ConnectionPreferences;
+import com.ford.syncV4.library.R;
+import com.ford.syncV4.library.persistance.ConnectionPreferences;
 import com.ford.syncV4.proxy.rpc.Show;
 
 import static android.content.Context.LAYOUT_INFLATER_SERVICE;

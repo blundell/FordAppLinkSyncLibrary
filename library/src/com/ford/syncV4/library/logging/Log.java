@@ -1,4 +1,4 @@
-package com.ford.syncV4.android.logging;
+package com.ford.syncV4.library.logging;
 
 public class Log { // TODO replace with more detailed log class
 

@@ -1,4 +1,4 @@
-package com.ford.syncV4.android.service;
+package com.ford.syncV4.library.service;
 
 import android.app.Service;
 import android.bluetooth.BluetoothAdapter;
@@ -7,10 +7,10 @@ import android.media.MediaPlayer;
 import android.os.Binder;
 import android.os.IBinder;
 
-import com.ford.syncV4.android.R;
-import com.ford.syncV4.android.logging.Log;
-import com.ford.syncV4.android.persistance.ConnectionPreferences;
-import com.ford.syncV4.android.persistance.Const;
+import com.ford.syncV4.library.R;
+import com.ford.syncV4.library.logging.Log;
+import com.ford.syncV4.library.persistance.ConnectionPreferences;
+import com.ford.syncV4.library.persistance.Const;
 import com.ford.syncV4.exception.SyncException;
 import com.ford.syncV4.exception.SyncExceptionCause;
 import com.ford.syncV4.proxy.RPCMessage;

@@ -1,10 +1,10 @@
-package com.ford.syncV4.android.service;
+package com.ford.syncV4.library.service;
 
 import android.content.ComponentName;
 import android.content.ServiceConnection;
 import android.os.IBinder;
 
-import com.ford.syncV4.android.logging.Log;
+import com.ford.syncV4.library.logging.Log;
 import com.ford.syncV4.proxy.RPCMessage;
 
 public class AppLinkServiceConnection implements ServiceConnection, AppLinkService {
