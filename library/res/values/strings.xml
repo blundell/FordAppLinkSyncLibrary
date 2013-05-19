@@ -2,5 +2,6 @@
 <resources>
 
   <string name="app_name">AppLinkTester</string>
+  <string name="label_activity_lockscreen">LockScreen</string>
 
 </resources>

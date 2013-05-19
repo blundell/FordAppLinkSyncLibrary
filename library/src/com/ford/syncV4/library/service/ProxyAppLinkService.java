@@ -169,10 +169,11 @@ public class ProxyAppLinkService extends Service implements IProxyListenerALM, A
 //        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
 //        i.addFlags(Intent.FLAG_ACTIVITY_NO_USER_ACTION);
 //        startActivity(i);   TODO
+        ProxyServiceAction.broadcastScreenLockRequest(this);
     }
 
     private void clearLockScreen() {
-        // TODO
+        ProxyServiceAction.broadcastScreenUnlockRequest(this);
     }
 
     private void showMessage(String line1, String line2) {

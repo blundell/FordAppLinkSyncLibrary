@@ -20,8 +20,19 @@
     android:icon="@drawable/fiesta"
     android:label="@string/app_name">
 
+    <activity
+      android:name=".lockscreen.LockScreenActivity"
+      android:label="@string/label_activity_lockscreen" />
 
     <service android:name=".service.ProxyAppLinkService" />
+
+    <receiver android:name=".lockscreen.LockScreenReceiver">
+      <intent-filter>
+        <action android:name="com.ford.syncV4.library.ACTION_REQ_LOCK_SCREEN" />
+        <action android:name="com.ford.syncV4.library.ACTION_REQ_UNLOCK_SCREEN" />
+      </intent-filter>
+
+    </receiver>
 
     <receiver android:name=".receivers.SyncReceiver">
       <intent-filter>

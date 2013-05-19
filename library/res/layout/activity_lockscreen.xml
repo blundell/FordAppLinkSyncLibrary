@@ -11,6 +11,6 @@
     android:layout_width="match_parent"
     android:contentDescription="Sync"
     android:layout_height="match_parent"
-    android:src="@drawable/sync" />
+    android:src="#FF0000" />
 
 </LinearLayout>

@@ -32,10 +32,6 @@
         <category android:name="android.intent.category.LAUNCHER" />
       </intent-filter>
     </activity>
-    <activity
-      android:label="@string/title_activity_lockscreen"
-      android:configChanges="orientation|keyboard|keyboardHidden|layoutDirection|screenLayout"
-      android:name=".LockScreenActivity" />
 
   </application>
 
