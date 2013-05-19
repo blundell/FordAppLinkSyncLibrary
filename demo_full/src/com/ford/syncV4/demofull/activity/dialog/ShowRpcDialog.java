@@ -8,7 +8,6 @@ import android.view.View;
 import android.widget.EditText;
 
 import com.ford.syncV4.demofull.R;
-import com.ford.syncV4.library.persistance.ConnectionPreferences;
 import com.ford.syncV4.proxy.rpc.Show;
 
 import static android.content.Context.LAYOUT_INFLATER_SERVICE;
@@ -77,8 +76,7 @@ public class ShowRpcDialog extends AlertDialog {
     }
 
     private boolean getIsMedia() {
-        ConnectionPreferences connectionPreferences = new ConnectionPreferences(getContext());
-        return connectionPreferences.isAnMediaApp();
+        return alertDialog.getContext().getResources().getBoolean(R.bool.is_media_app);
     }
 
     @Override

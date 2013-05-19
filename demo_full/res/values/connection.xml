@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <bool name="is_media_app">true</bool>
+
+  <bool name="debug_using_tcp">true</bool>
+  <string name="debug_ip">192.168.0.2</string>
+</resources>

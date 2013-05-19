@@ -14,11 +14,9 @@ import android.widget.Toast;
 
 import com.ford.syncV4.demofull.R;
 import com.ford.syncV4.demofull.activity.console.LogAdapter;
-import com.ford.syncV4.demofull.activity.dialog.PropertiesDialog;
 import com.ford.syncV4.demofull.activity.dialog.SendMessageDialog;
 import com.ford.syncV4.demofull.logging.Log;
 import com.ford.syncV4.library.AppLinkActivity;
-import com.ford.syncV4.library.persistance.ConnectionPreferences;
 import com.ford.syncV4.library.persistance.Const;
 import com.ford.syncV4.library.service.AppLinkServiceConnection;
 import com.ford.syncV4.library.service.ButtonNameParcel;
@@ -55,11 +53,7 @@ public class AppLinkTesterActivity extends AppLinkActivity implements OnClickLis
         ListView consoleListView = (ListView) findViewById(R.id.messageList);
         consoleListView.setAdapter(_msgAdapter);
 
-        if (savedInstanceState == null) {
-            showConnectionSetupDialog();
-        } else {
-            showPropertiesInTitle();
-        }
+        showPropertiesInTitle();
     }
 
     @Override
@@ -69,29 +63,11 @@ public class AppLinkTesterActivity extends AppLinkActivity implements OnClickLis
     }
 
     /**
-     * Shows a dialog where the user can select connection features (protocol
-     * version, media flag, app name, language, HMI language, and transport
-     * settings). Starts the proxy after selecting.
-     */
-    private void showConnectionSetupDialog() {
-        new PropertiesDialog(this)
-                .setOnClickListener(new PropertiesDialog.PropertiesDialogClickListener() {
-                    @Override
-                    public void onPropertiesSelected() {
-                        stopAppLinkService();
-                        showPropertiesInTitle();
-                        startAppLinkService(null);
-                    }
-                }).temp().show(); // Move to another Activity, make it a fragment?
-    }
-
-    /**
      * Displays the current protocol properties in the activity's title.
      */
     private void showPropertiesInTitle() {
-        ConnectionPreferences connectionPreferences = new ConnectionPreferences(this);
-        boolean isMedia = connectionPreferences.isAnMediaApp();
-        String transportType = connectionPreferences.getTransportType() == Const.Transport.KEY_TCP ? Const.Transport.TCP : Const.Transport.BLUETOOTH;
+        boolean isMedia = getResources().getBoolean(R.bool.is_media_app);
+        String transportType = getResources().getBoolean(R.bool.debug_using_tcp) ? Const.Transport.TCP : Const.Transport.BLUETOOTH;
         setTitle(getString(R.string.app_name) + " (" + (isMedia ? "" : "non-") + "media, " + transportType + ")");
     }
 

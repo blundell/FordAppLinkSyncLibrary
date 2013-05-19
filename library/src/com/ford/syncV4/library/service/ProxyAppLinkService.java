@@ -10,15 +10,13 @@ import com.ford.syncV4.exception.SyncException;
 import com.ford.syncV4.exception.SyncExceptionCause;
 import com.ford.syncV4.library.R;
 import com.ford.syncV4.library.logging.Log;
-import com.ford.syncV4.library.persistance.ConnectionPreferences;
-import com.ford.syncV4.library.persistance.Const;
+import com.ford.syncV4.library.sync.SyncProxyFactory;
 import com.ford.syncV4.proxy.RPCMessage;
 import com.ford.syncV4.proxy.SyncProxyALM;
 import com.ford.syncV4.proxy.interfaces.IProxyListenerALM;
 import com.ford.syncV4.proxy.rpc.*;
 import com.ford.syncV4.proxy.rpc.enums.ButtonName;
 import com.ford.syncV4.proxy.rpc.enums.DriverDistractionState;
-import com.ford.syncV4.transport.TCPTransportConfig;
 import com.ford.syncV4.transport.TransportType;
 
 import java.util.Arrays;
@@ -48,40 +46,23 @@ public class ProxyAppLinkService extends Service implements IProxyListenerALM, A
     }
 
     private void startProxyIfNetworkConnected() {
-        ConnectionPreferences connectionPreferences = new ConnectionPreferences(this);
-        int transportType = connectionPreferences.getTransportType();
+        boolean debugUsingTcp = getResources().getBoolean(R.bool.debug_using_tcp);
 
-        if (transportType == Const.Transport.KEY_BLUETOOTH) {
+        if (debugUsingTcp) {
+            Log.d("Transport = Network. Used for Development Mode.");
+            startSyncProxy();
+        } else {
             Log.d("Transport = Bluetooth.");
             BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
             if (bluetoothAdapter != null && bluetoothAdapter.isEnabled()) {
                 startSyncProxy();
             }
-        } else {
-            Log.d("Transport = Network. Used for Development Mode.");
-            startSyncProxy();
         }
     }
 
     private void startSyncProxy() {
         try {
-            ConnectionPreferences connectionPreferences = new ConnectionPreferences(this);
-            int transportType = connectionPreferences.getTransportType();
-            boolean isMediaApp = connectionPreferences.isAnMediaApp();
-
-            String appName = getString(R.string.app_name);
-
-            if (transportType == Const.Transport.KEY_BLUETOOTH) {
-                proxy = new SyncProxyALM(this, appName, isMediaApp);
-            } else {
-                // Dev mode - move these out of preferences
-                // and into a resource file, which can be toggle on
-                // with a boolean
-                int tcpPort = connectionPreferences.getTcpPort();
-                String ipAddress = connectionPreferences.getIpAddress();
-                boolean autoReconnect = connectionPreferences.shouldAutoReconnect();
-                proxy = new SyncProxyALM(this, appName, isMediaApp, new TCPTransportConfig(tcpPort, ipAddress, autoReconnect));
-            }
+            proxy = SyncProxyFactory.getSyncProxyALM(getResources(), this);
         } catch (SyncException e) {
             Log.e("Sync Wut", e);
             stopSelf();
@@ -165,10 +146,6 @@ public class ProxyAppLinkService extends Service implements IProxyListenerALM, A
     }
 
     private void showLockScreen() {
-//        Intent i = new Intent(this, AppLinkTesterActivity.class);
-//        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-//        i.addFlags(Intent.FLAG_ACTIVITY_NO_USER_ACTION);
-//        startActivity(i);   TODO
         ProxyServiceAction.broadcastScreenLockRequest(this);
     }
 

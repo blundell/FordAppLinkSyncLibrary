@@ -14,7 +14,10 @@ public class LockScreenReceiver extends BroadcastReceiver {
             Intent lockIntent = new Intent(context, LockScreenActivity.class);
             context.startActivity(lockIntent);
         } else if (ProxyServiceAction.ACTION_REQ_UNLOCK_SCREEN.equals(action)) {
-            Intent unlockIntent = new Intent(context, LockScreenActivity.class);   // TODO extras or intent flags or something
+            Intent unlockIntent = new Intent(context, LockScreenActivity.class);
+//            TODO extras or intent flags or something
+//        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+//        i.addFlags(Intent.FLAG_ACTIVITY_NO_USER_ACTION);
             context.startActivity(unlockIntent);
         }
     }
