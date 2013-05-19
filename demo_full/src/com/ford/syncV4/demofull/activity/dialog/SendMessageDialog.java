@@ -7,7 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.*;
 
-import com.ford.syncV4.library.R;
+import com.ford.syncV4.demofull.R;
 import com.ford.syncV4.demofull.logging.Log;
 import com.ford.syncV4.proxy.RPCMessage;
 import com.ford.syncV4.proxy.TTSChunkFactory;

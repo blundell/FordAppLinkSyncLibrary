@@ -11,7 +11,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.RadioGroup;
 
-import com.ford.syncV4.library.R;
+import com.ford.syncV4.demofull.R;
 import com.ford.syncV4.library.persistance.ConnectionPreferences;
 import com.ford.syncV4.library.persistance.Const;
 import com.ford.syncV4.proxy.rpc.enums.Language;

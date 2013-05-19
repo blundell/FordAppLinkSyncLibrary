@@ -1,4 +1,4 @@
-package com.ford.syncV4.demofull.adapters;
+package com.ford.syncV4.demofull.console;
 
 import android.app.Activity;
 

@@ -7,7 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 
-import com.ford.syncV4.library.R;
+import com.ford.syncV4.demofull.R;
 import com.ford.syncV4.library.persistance.ConnectionPreferences;
 import com.ford.syncV4.proxy.rpc.Show;
 
